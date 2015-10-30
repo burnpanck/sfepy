@@ -16,7 +16,7 @@ def in_dir(adir):
 def gen_datas(meshes):
     datas = {}
 
-    for key, mesh in meshes.iteritems():
+    for key, mesh in meshes.items():
         bbox = mesh.get_bounding_box()
         nx = bbox[1,0] - bbox[0,0]
         centre = 0.5 * bbox.sum(axis=0)

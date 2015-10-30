@@ -150,7 +150,7 @@ class Test(TestCommon):
 
         ok = True
         conf_dir = op.dirname(__file__)
-        for filename, adim in meshes.iteritems():
+        for filename, adim in meshes.items():
             self.report('mesh: %s, dimension %d' % (filename, adim))
             io = MeshIO.any_from_filename(filename, prefix_dir=conf_dir)
             dim = io.read_dimension()
@@ -176,7 +176,7 @@ class Test(TestCommon):
                                prefix_dir=conf_dir)
 
         oks = []
-        for suffix, format_ in supported_formats.iteritems():
+        for suffix, format_ in supported_formats.items():
             if isinstance(format_, tuple):
                 continue
             if 'w' not in supported_capabilities[format_]: continue

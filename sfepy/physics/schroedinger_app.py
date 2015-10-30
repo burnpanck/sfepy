@@ -178,7 +178,7 @@ class SchroedingerApp(PDESolverApp):
 
         mtx_phi = nm.empty((variables.di.ptr[-1], mtx_s_phi.shape[1]),
                            dtype=nm.float64)
-        for ii in xrange(mtx_s_phi.shape[1]):
+        for ii in range(mtx_s_phi.shape[1]):
             mtx_phi[:,ii] = variables.make_full_vec(mtx_s_phi[:,ii])
 
         return mtx_phi
@@ -196,12 +196,12 @@ class SchroedingerApp(PDESolverApp):
         out = get_default(out, {})
         state = pb.create_state()
         aux = {}
-        for ii in xrange(eigs.shape[0]):
+        for ii in range(eigs.shape[0]):
             if save is not None:
                 if (ii > save[0]) and (ii < (n_eigs - save[1])): continue
             state.set_full(mtx_phi[:,ii])
             aux = state.create_output_dict()
-            key = aux.keys()[0]
+            key = list(aux.keys())[0]
             out[key+'%03d' % ii] = aux[key]
 
         if aux.get('__mesh__') is not None:

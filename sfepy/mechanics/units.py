@@ -99,7 +99,7 @@ class Unit(Struct):
         Get the prefix and numerical multiplier corresponding to a numerical
         coefficient, omitting prefixes in omit tuple.
         """
-        values = [val for key, val in prefixes.iteritems() if key not in omit]
+        values = [val for key, val in prefixes.items() if key not in omit]
         coefs = nm.array(values, dtype=nm.float64)
         coefs.sort()
         ii = nm.searchsorted(coefs, bias*coef, side='left')
@@ -113,7 +113,7 @@ class Unit(Struct):
     def __init__(self, name):
         self.name = name
 
-        aux = sorted(prefixes.keys(), reverse=True)
+        aux = sorted(list(prefixes.keys()), reverse=True)
         for prefix in aux:
             lp = len(prefix)
             if (prefix == name[:lp]) and (lp < len(name)): break
@@ -193,7 +193,7 @@ class Quantity(Struct):
         self.def_coef = float(self.symbolic_value.subs(self.def_names))
 
         coef_dict = {}
-        for key, val in self.def_units.iteritems():
+        for key, val in self.def_units.items():
             coef_dict[val.name] = self.units[key].coef
         self.coef_dict = coef_dict
         
@@ -234,7 +234,7 @@ def get_consistent_unit_set(length=None, time=None, mass=None, temperature=None)
 
     derived_units = {}
 
-    for quantity_name in units_of_quantities.keys():
+    for quantity_name in list(units_of_quantities.keys()):
         quantity = Quantity(quantity_name, unit_set)
 
         derived_units[quantity_name] = quantity()

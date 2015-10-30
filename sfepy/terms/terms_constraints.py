@@ -95,7 +95,7 @@ class NonPenetrationTerm(Term):
         # Expand base corresponding to \ul{u} for all dofs.
         bf = vsg.bf
         ebf = nm.zeros(bf.shape[:2] + (dim, n_fn * dim), dtype=nm.float64)
-        for ir in xrange(dim):
+        for ir in range(dim):
             ebf[..., ir, ir*n_fn:(ir+1)*n_fn] = bf[..., 0, :]
 
         return val_qp, ebf, ssg.bf, mat, vsg, diff_var, self.mode

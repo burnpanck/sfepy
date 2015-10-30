@@ -141,7 +141,7 @@ if __name__ == '__main__':
     from sfepy.discrete.fem.geometry_element import (GeometryElement,
                                                      geometry_data)
 
-    for key, gd in geometry_data.iteritems():
+    for key, gd in geometry_data.items():
         if key == '1_2' : continue
 
         gel = GeometryElement(key)

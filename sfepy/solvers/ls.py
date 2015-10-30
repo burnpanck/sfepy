@@ -85,13 +85,11 @@ def petsc_call(call):
 
     return _petsc_call
 
-class ScipyDirect(LinearSolver):
+class ScipyDirect(LinearSolver, metaclass=SolverMeta):
     """
     Direct sparse solver from SciPy.
     """
     name = 'ls.scipy_direct'
-
-    __metaclass__ = SolverMeta
 
     _parameters = [
         ('method', "{'auto', 'umfpack', 'superlu'}", 'auto', False,
@@ -153,7 +151,7 @@ class ScipyDirect(LinearSolver):
         if self.mtx is not None:
             self.solve = self.sls.factorized(self.mtx)
 
-class ScipyIterative(LinearSolver):
+class ScipyIterative(LinearSolver, metaclass=SolverMeta):
     """
     Interface to SciPy iterative solvers.
 
@@ -164,8 +162,6 @@ class ScipyIterative(LinearSolver):
     matrix, dense matrix, LinearOperator).
     """
     name = 'ls.scipy_iterative'
-
-    __metaclass__ = SolverMeta
 
     _parameters = [
         ('method', 'str', 'cg', False,
@@ -224,13 +220,11 @@ class ScipyIterative(LinearSolver):
 
         return sol
 
-class PyAMGSolver(LinearSolver):
+class PyAMGSolver(LinearSolver, metaclass=SolverMeta):
     """
     Interface to PyAMG solvers.
     """
     name = 'ls.pyamg'
-
-    __metaclass__ = SolverMeta
 
     _parameters = [
         ('method', 'str', 'smoothed_aggregation_solver', False,
@@ -280,7 +274,7 @@ class PyAMGSolver(LinearSolver):
 
         return sol
 
-class PETScKrylovSolver(LinearSolver):
+class PETScKrylovSolver(LinearSolver, metaclass=SolverMeta):
     """
     PETSc Krylov subspace solver.
 
@@ -299,8 +293,6 @@ class PETScKrylovSolver(LinearSolver):
     residual.
     """
     name = 'ls.petsc'
-
-    __metaclass__ = SolverMeta
 
     _parameters = [
         ('method', 'str', 'cg', False,
@@ -335,7 +327,7 @@ class PETScKrylovSolver(LinearSolver):
         from petsc4py import PETSc as petsc
 
         converged_reasons = {}
-        for key, val in petsc.KSP.ConvergedReason.__dict__.iteritems():
+        for key, val in petsc.KSP.ConvergedReason.__dict__.items():
             if isinstance(val, int):
                 converged_reasons[val] = key
 
@@ -417,7 +409,7 @@ class PETScKrylovSolver(LinearSolver):
 
         return sol
 
-class PETScParallelKrylovSolver(PETScKrylovSolver):
+class PETScParallelKrylovSolver(PETScKrylovSolver, metaclass=SolverMeta):
     """
     PETSc Krylov subspace solver able to run in parallel by storing the
     system to disk and running a separate script via `mpiexec`.
@@ -431,8 +423,6 @@ class PETScParallelKrylovSolver(PETScKrylovSolver):
     residual.
     """
     name = 'ls.petsc_parallel'
-
-    __metaclass__ = SolverMeta
 
     _parameters = PETScKrylovSolver._parameters + [
         ('log_dir', 'str', '.', False,
@@ -538,15 +528,13 @@ class PETScParallelKrylovSolver(PETScKrylovSolver):
 
         return sol
 
-class SchurGeneralized(ScipyDirect):
+class SchurGeneralized(ScipyDirect, metaclass=SolverMeta):
     r"""
     Generalized Schur complement.
 
     Defines the matrix blocks and calls user defined function.
     """
     name = 'ls.schur_generalized'
-
-    __metaclass__ = SolverMeta
 
     _parameters = ScipyDirect._parameters + [
         ('blocks', 'dict', None, True,
@@ -565,7 +553,7 @@ class SchurGeneralized(ScipyDirect):
         aux_state = State(equations.variables)
 
         conf.idxs = {}
-        for bk, bv in conf.blocks.iteritems():
+        for bk, bv in conf.blocks.items():
             aux_state.fill(0.0)
             for jj in bv:
                 idx = equations.variables.di.indx[jj]
@@ -584,7 +572,7 @@ class SchurGeneralized(ScipyDirect):
         mtxslc_f = {}
         nn = {}
 
-        for ik, iv in mtxi.iteritems():
+        for ik, iv in mtxi.items():
             ptr = 0
             nn[ik] = len(iv)
             mtxslc_s[ik] = []
@@ -601,13 +589,13 @@ class SchurGeneralized(ScipyDirect):
         rhss = {}
         ress = {}
         get_sub = mtx._get_submatrix
-        for ir in mtxi.iterkeys():
+        for ir in mtxi.keys():
             rhss[ir] = nm.zeros((nn[ir],), dtype=nm.float64)
             ress[ir] = nm.zeros((nn[ir],), dtype=nm.float64)
             for jr, idxr in enumerate(mtxslc_f[ir]):
                 rhss[ir][mtxslc_s[ir][jr]] = rhs[idxr]
 
-            for ic in mtxi.iterkeys():
+            for ic in mtxi.keys():
                 mtxid = '%s%s' % (ir, ic)
                 mtxs[mtxid] = nm.zeros((nn[ir], nn[ic]), dtype=nm.float64)
                 for jr, idxr in enumerate(mtxslc_f[ir]):
@@ -619,13 +607,13 @@ class SchurGeneralized(ScipyDirect):
         self.orig_conf.function(ress, mtxs, rhss, nn)
 
         res = nm.zeros_like(rhs)
-        for ir in mtxi.iterkeys():
+        for ir in mtxi.keys():
             for jr, idxr in enumerate(mtxslc_f[ir]):
                 res[idxr] = ress[ir][mtxslc_s[ir][jr]]
 
         return res
 
-class SchurComplement(SchurGeneralized):
+class SchurComplement(SchurGeneralized, metaclass=SolverMeta):
     r"""
     Schur complement.
 
@@ -655,8 +643,6 @@ class SchurComplement(SchurGeneralized):
     See: http://en.wikipedia.org/wiki/Schur_complement
     """
     name = 'ls.schur_complement'
-
-    __metaclass__ = SolverMeta
 
     _parameters = ScipyDirect._parameters + [
         ('eliminate', 'list', None, True,
@@ -692,15 +678,13 @@ class SchurComplement(SchurGeneralized):
 
         SchurGeneralized.__init__(self, conf, **kwargs)
 
-class MultiProblem(ScipyDirect):
+class MultiProblem(ScipyDirect, metaclass=SolverMeta):
     r"""
     Conjugate multiple problems.
 
     Allows to define conjugate multiple problems.
     """
     name = 'ls.cm_pb'
-
-    __metaclass__ = SolverMeta
 
     _parameters = ScipyDirect._parameters + [
         ('others', 'list', None, True,
@@ -723,7 +707,7 @@ class MultiProblem(ScipyDirect):
         pb_adi_indx = problem.equations.variables.adi.indx
         self.adi_indx = pb_adi_indx.copy()
         last_indx = -1
-        for ii in self.adi_indx.itervalues():
+        for ii in self.adi_indx.values():
             last_indx = nm.max([last_indx, ii.stop])
 
         # coupling variables
@@ -785,7 +769,7 @@ class MultiProblem(ScipyDirect):
         self.subpb.append([problem, None, None])
 
         self.cvars_to_pb_map = {}
-        for varname, pbs in self.cvars_to_pb.iteritems():
+        for varname, pbs in self.cvars_to_pb.items():
             # match field nodes
             coors = []
             for ii in pbs:
@@ -850,7 +834,7 @@ class MultiProblem(ScipyDirect):
 
         max_indx = 0
         hst = nm.hstack
-        for ii in self.adi_indx.itervalues():
+        for ii in self.adi_indx.values():
             max_indx = nm.max([max_indx, ii.stop])
 
         new_rhs = nm.zeros((max_indx,), dtype=rhs.dtype)
@@ -864,7 +848,7 @@ class MultiProblem(ScipyDirect):
         aux_rows = nm.array([], dtype=nm.int32)
         aux_cols = nm.array([], dtype=nm.int32)
 
-        for jk, jv in adi_indxi.iteritems():
+        for jk, jv in adi_indxi.items():
             if jk in self.cvars_to_pb:
                 if not(self.cvars_to_pb[jk][0] == -1):
                     continue
@@ -890,13 +874,13 @@ class MultiProblem(ScipyDirect):
             mtxs.append(mtxi)
 
             adi_indxi = pbi.equations.variables.adi.indx
-            for ik, iv in adi_indxi.iteritems():
+            for ik, iv in adi_indxi.items():
                 if ik in self.cvars_to_pb:
                     if not(self.cvars_to_pb[ik][0] == kk):
                         continue
 
                 giv = self.adi_indx[ik]
-                for jk, jv in adi_indxi.iteritems():
+                for jk, jv in adi_indxi.items():
                     gjv = self.adi_indx[jk]
                     if jk in self.cvars_to_pb:
                         if not(self.cvars_to_pb[jk][0] == kk):
@@ -910,14 +894,14 @@ class MultiProblem(ScipyDirect):
 
         mtxs.append(mtx)
         # copy "coupling" (sub)matricies
-        for varname, pbs in self.cvars_to_pb.iteritems():
+        for varname, pbs in self.cvars_to_pb.items():
             idx = pbs[1]
             pbi = self.subpb[idx][0]
             mtxi = mtxs[idx]
             gjv = self.adi_indx[varname]
             jv = pbi.equations.variables.adi.indx[varname]
             adi_indxi = pbi.equations.variables.adi.indx
-            for ik, iv in adi_indxi.iteritems():
+            for ik, iv in adi_indxi.items():
                 if ik == varname:
                     continue
 
@@ -944,11 +928,11 @@ class MultiProblem(ScipyDirect):
         for kk, (pbi, sti0, _) in enumerate(self.subpb):
             adi_indxi = pbi.equations.variables.adi.indx
             max_indx = 0
-            for ii in adi_indxi.itervalues():
+            for ii in adi_indxi.values():
                 max_indx = nm.max([max_indx, ii.stop])
 
             resi = nm.zeros((max_indx,), dtype=res0.dtype)
-            for ik, iv in adi_indxi.iteritems():
+            for ik, iv in adi_indxi.items():
                 giv = self.adi_indx[ik]
                 if ik in self.cvars_to_pb:
                     if pbi is self.subpb[self.cvars_to_pb[ik][1]][0]:

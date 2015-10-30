@@ -75,40 +75,40 @@ class geometry(object):
                 return x
         return 0
     def printinfo(self, verbose=False):
-        print "General geometry information:"
-        print "  dimension:", self.dim
-        print "  points:", len(self.d0)
+        print("General geometry information:")
+        print("  dimension:", self.dim)
+        print("  points:", len(self.d0))
         if verbose:
-            for k, v in self.d0.iteritems():
-                print "    %d - %s" % (k, v.getstr())
-        print "  lines:", len(self.d1)
+            for k, v in self.d0.items():
+                print("    %d - %s" % (k, v.getstr()))
+        print("  lines:", len(self.d1))
         if verbose:
-            for k, v in self.d1.iteritems():
-                print "    %d - " % k, v.points
-        print "  surfaces:", len(self.d2)
+            for k, v in self.d1.items():
+                print("    %d - " % k, v.points)
+        print("  surfaces:", len(self.d2))
         if verbose:
-            for k, v in self.d2.iteritems():
+            for k, v in self.d2.items():
                 if v.is_hole:
                     aux = '(hole)'
                 else:
                     aux = ''
-                print "    %d%s - " % (k, aux), v.lines
-        print "  volumes:", len(self.d3)
+                print("    %d%s - " % (k, aux), v.lines)
+        print("  volumes:", len(self.d3))
         if verbose:
-            for k, v in self.d3.iteritems():
-                print "    %d - " % k, v.surfaces
-        print "Physical entities:"
+            for k, v in self.d3.items():
+                print("    %d - " % k, v.surfaces)
+        print("Physical entities:")
         if self.dim == 2:
-            print "  surfaces (regions):"
-            for d in self.phys2.values():
-                print "    %d: surface numbers %r"%(d.getn(),d.surfaces)
+            print("  surfaces (regions):")
+            for d in list(self.phys2.values()):
+                print("    %d: surface numbers %r"%(d.getn(),d.surfaces))
         elif self.dim == 3:
-            print "  surfaces (boundary conditions):"
-            for d in self.phys2.values():
-                print "    %d: surface numbers %r"%(d.getn(),d.surfaces)
-            print "  volumes (regions):"
-            for d in self.phys3.values():
-                print "    %d: volume numbers %r"%(d.getn(),d.volumes)
+            print("  surfaces (boundary conditions):")
+            for d in list(self.phys2.values()):
+                print("    %d: surface numbers %r"%(d.getn(),d.surfaces))
+            print("  volumes (regions):")
+            for d in list(self.phys3.values()):
+                print("    %d: volume numbers %r"%(d.getn(),d.volumes))
 
     def leaveonlyphysicalsurfaces(self):
         points={}
@@ -165,7 +165,7 @@ class geometry(object):
                 self.addline(lid, [points[ii], points[ii + 1]])
                 lines.append(lid)
 
-            for s in self.d2.itervalues():
+            for s in self.d2.values():
                 try:
                     idx = s.lines.index(l.n)
                 except ValueError:
@@ -202,7 +202,7 @@ class geometry(object):
         # write nodes
         nodes = []
         map = {}
-        for x in self.d0.values():
+        for x in list(self.d0.values()):
             assert isinstance(x, point)
             nodes.append(x.getxyz())
             map[x.getn()] = len(nodes)
@@ -225,7 +225,7 @@ class geometry(object):
 
             hole_pts = []
             regions=[]
-            for x2 in self.d2.values():
+            for x2 in list(self.d2.values()):
                 assert isinstance(x2, surface)
                 for x1 in x2.getlines():
                     assert isinstance(x1, line)
@@ -237,7 +237,7 @@ class geometry(object):
                     hole_pts.append(hole.getxyz())
 
         # regions
-        for x in self.phys2.values():
+        for x in list(self.phys2.values()):
             assert isinstance(x, physicalsurface)
             for x2 in x.getsurfaces():
                 if not x2.is_hole:
@@ -260,7 +260,7 @@ class geometry(object):
 
         if self.dim == 3:
 
-            for x in self.d2.values():
+            for x in list(self.d2.values()):
                 assert isinstance(x, surface)
                 p = [map[y.getn()] for y in x.getpoints()]
                 h = []
@@ -288,7 +288,7 @@ class geometry(object):
             s += "# holes\n0\n"
             # regions
             regions=[]
-            for x in self.phys3.values():
+            for x in list(self.phys3.values()):
                 assert isinstance(x, physicalvolume)
                 for v in x.getvolumes():
                     regions.append(v.getinsidepoint().getxyz()+[x.getn()])
@@ -388,10 +388,10 @@ class geometry(object):
 
         try:
             tokens= grammar.parseFile(filename)
-        except ParseException, err:
-            print err.line
-            print " "*(err.column-1) + "^"
-            print err
+        except ParseException as err:
+            print(err.line)
+            print(" "*(err.column-1) + "^")
+            print(err)
             raise err
 
         lineloops={}

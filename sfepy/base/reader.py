@@ -1,4 +1,4 @@
-from base import Struct
+from .base import Struct
 import os.path as op
 
 ##
@@ -38,10 +38,10 @@ class Reader( Struct ):
         filename = op.join( self.directory, name + '.py' )
 
         aux = {}
-        execfile( filename, {}, aux )
+        exec(compile(open( filename ).read(), filename, 'exec'), {}, aux)
 
         obj = obj_class()
-        for key, val in aux.iteritems():
+        for key, val in aux.items():
             obj.__dict__[key] = val
 
         return obj

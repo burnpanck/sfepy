@@ -57,7 +57,7 @@ def boundary(f, variables):
     a = 5.
     for xx in arange(-a, a, 0.1):
         yy = -a
-        print xx, yy, l(xx, yy)
+        print(xx, yy, l(xx, yy))
 
 if __name__ == '__main__':
     from sympy.abc import x, y

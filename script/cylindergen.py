@@ -75,9 +75,9 @@ def main():
     shape = eval( "nm.array( %s, dtype = nm.int32 )" % options.shape )
     centre = eval( "nm.array( %s, dtype = nm.float64 )" % options.centre )
 
-    print dims
-    print shape
-    print centre
+    print(dims)
+    print(shape)
+    print(centre)
 
     mesh = gen_cylinder_mesh(dims, shape, centre,
                              axis=options.axis,

@@ -12,7 +12,7 @@ except:
     from mayavi.sources.vtk_data_source import VTKDataSource
     from pyface.timer.api import Timer
 
-from dataset_manager import DatasetManager
+from .dataset_manager import DatasetManager
 
 from sfepy.base.base import Struct, basestr
 from sfepy.postprocess.utils import mlab
@@ -45,7 +45,7 @@ def create_file_source(filename, watch=False, offscreen=True):
         else:
             return VTKFileSource(filename, **kwargs)
 
-    elif fmt in supported_formats.keys():
+    elif fmt in list(supported_formats.keys()):
         if is_sequence:
             if fmt == '.h5':
                 raise ValueError('format .h5 does not support file sequences!')
@@ -317,7 +317,7 @@ class GenericFileSource(FileSource):
         sym = (dim + 1) * dim / 2
 
         dm = DatasetManager(dataset=dataset)
-        for key, val in data.iteritems():
+        for key, val in data.items():
             vd = val.data
 ##             print vd.shape
             if val.mode == 'vertex':

@@ -82,7 +82,7 @@ def main():
     pb.time_update(ebcs=Conditions([fix_u, shift_u]))
 
     vec = pb.solve()
-    print nls_status
+    print(nls_status)
 
     pb.save_state('linear_elasticity.vtk', vec)
 

@@ -65,7 +65,7 @@ def label_local_entities(ax, cmesh, edim, color='b', fontsize=10):
 
     eps = 0.1
     oeps = 1.0 - eps
-    for ii in xrange(conn.num):
+    for ii in range(conn.num):
         for ic, ie in enumerate(conn.indices[off[ii]:off[ii+1]]):
             # Shift labels towards the cell centre.
             cc = oeps * coors[ie] + eps * centres[ii]

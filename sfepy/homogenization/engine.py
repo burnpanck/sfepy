@@ -2,7 +2,7 @@ from copy import copy
 
 from sfepy.base.base import output, get_default, Struct
 from sfepy.applications import PDESolverApp, Application
-from coefs_base import MiniAppBase
+from .coefs_base import MiniAppBase
 
 def insert_sub_reqs(reqs, levels, req_info):
     """Recursively build all requirements in correct order."""
@@ -116,7 +116,7 @@ class HomogenizationEngine(PDESolverApp):
         opts = self.app_options
         coef_info = getattr(self.conf, opts.coefs)
 
-        compute_names = set(get_default(opts.compute_only, coef_info.keys()))
+        compute_names = set(get_default(opts.compute_only, list(coef_info.keys())))
         compute_names = ['c.' + key for key in compute_names]
 
         is_store_filenames = coef_info.pop('filenames', None) is not None

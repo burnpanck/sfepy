@@ -10,6 +10,7 @@ from sfepy.discrete import Problem
 from sfepy.terms import Term
 from sfepy.solvers.ls import ScipyDirect
 from sfepy.solvers.nls import Newton
+import collections
 
 def create_mass_matrix(field):
     """
@@ -91,7 +92,7 @@ def make_l2_projection_data(target, eval_data, order=None,
 
     def _eval_data(ts, coors, mode, **kwargs):
         if mode == 'qp':
-            if callable(eval_data):
+            if isinstance(eval_data, collections.Callable):
                 val = eval_data(ts, coors, mode, **kwargs)
 
             else:

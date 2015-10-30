@@ -322,8 +322,8 @@ class StressTransform(Struct):
 
     def __init__(self, def_grad, jacobian=None):
         """
-        Set :math:`\ull{F} = \pdiff{\ul{x}}{\ul{X}}` and optionally also
-        :math:`J = \det(\ull{F})`.
+        Set :math:`\\ull{F} = \pdiff{\\ul{x}}{\\ul{X}}` and optionally also
+        :math:`J = \det(\\ull{F})`.
         """
         self.def_grad = nm.asarray(def_grad, dtype=nm.float64)
         self.n_el, self.n_qp, self.dim = self.def_grad.shape[:3]

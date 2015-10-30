@@ -2,8 +2,9 @@ import time
 import sys
 import os
 from copy import copy, deepcopy
-from types import UnboundMethodType
-from getch import getch
+from .getch import getch
+
+import six
 
 import numpy as nm
 import scipy.sparse as sp
@@ -20,7 +21,7 @@ if not os.path.exists(sfepy_config_dir):
     os.makedirs(sfepy_config_dir)
 
 if sys.version[0] < '3':
-    basestr = basestring
+    basestr = str
 
 else:
     basestr = str
@@ -116,7 +117,7 @@ def mark_time(times, msg=None):
     tt = time.clock()
     times.append(tt)
     if (msg is not None) and (len(times) > 1):
-        print msg, times[-1] - times[-2]
+        print(msg, times[-1] - times[-2])
 
 def import_file(filename, package_name=None, can_reload=True):
     """
@@ -175,10 +176,10 @@ def try_imports(imports, fail_msg=None):
     msgs = []
     for imp in imports:
         try:
-            exec imp
+            exec(imp)
             break
 
-        except Exception, inst:
+        except Exception as inst:
             msgs.append(str(inst))
 
     else:
@@ -212,11 +213,11 @@ def pause(msg=None):
     f = sys._getframe(1)
     ff = f.f_code
     if (msg):
-        print '%s, %d: %s(), %d: %s' % (ff.co_filename, ff.co_firstlineno,
-                                        ff.co_name, f.f_lineno, msg)
+        print('%s, %d: %s(), %d: %s' % (ff.co_filename, ff.co_firstlineno,
+                                        ff.co_name, f.f_lineno, msg))
     else:
-        print '%s, %d: %s(), %d' % (ff.co_filename, ff.co_firstlineno,
-                                    ff.co_name, f.f_lineno)
+        print('%s, %d: %s(), %d' % (ff.co_filename, ff.co_firstlineno,
+                                    ff.co_name, f.f_lineno))
     spause()
 
 ##
@@ -234,7 +235,7 @@ def spause(msg=None):
     This is useful for debugging. This function is called from pause().
     """
     if (msg):
-        print msg
+        print(msg)
     sys.stdout.flush()
     ch = getch()
     if ch == 'q':
@@ -290,7 +291,7 @@ class Struct(object):
         ss += '\n'
 
         if keys is None:
-            keys = self.__dict__.keys()
+            keys = list(self.__dict__.keys())
 
         str_attrs = sorted(Struct.get(self, '_str_attrs', keys))
         printed_keys = []
@@ -322,7 +323,7 @@ class Struct(object):
                     ss += '  %s:\n%s\n' % (key, aux[1:])
 
             elif isinstance(val, dict):
-                sval = self._format_sequence(val.keys(), threshold)
+                sval = self._format_sequence(list(val.keys()), threshold)
                 sval = sval.replace('\n', '\n    ')
                 ss += '  %s:\n    dict with keys: %s\n' % (key, sval)
 
@@ -369,7 +370,7 @@ class Struct(object):
         attribute and its counterpart in other are both Structs - these are
         merged then."""
         new = copy(self)
-        for key, val in other.__dict__.iteritems():
+        for key, val in other.__dict__.items():
             if hasattr(new, key):
                 sval = getattr(self, key)
                 if issubclass(sval.__class__, Struct) and \
@@ -387,7 +388,7 @@ class Struct(object):
         """Merge Structs in place. Attributes of self are left unchanged
         unless an attribute and its counterpart in other are both Structs -
         these are merged then."""
-        for key, val in other.__dict__.iteritems():
+        for key, val in other.__dict__.items():
             if hasattr(self, key):
                 sval = getattr(self, key)
                 if issubclass(sval.__class__, Struct) and \
@@ -401,12 +402,12 @@ class Struct(object):
         """
         As __str__(), but for class attributes.
         """
-        return self._str(self.__class__.__dict__.keys())
+        return self._str(list(self.__class__.__dict__.keys()))
 
     # 08.03.2005, c
     def str_all(self):
         ss = "%s\n" % self.__class__
-        for key, val in self.__dict__.iteritems():
+        for key, val in self.__dict__.items():
             if issubclass(self.__dict__[key].__class__, Struct):
                 ss += "  %s:\n" % key
                 aux = "\n" + self.__dict__[key].str_all()
@@ -522,7 +523,7 @@ class Container(Struct):
                 self._objs[ii] = obj
                 self.names[ii] = obj.name
 
-        except (IndexError, ValueError), msg:
+        except (IndexError, ValueError) as msg:
             raise IndexError(msg)
 
     def __getitem__(self, ii):
@@ -534,7 +535,7 @@ class Container(Struct):
 
             return  self._objs[ii]
 
-        except (IndexError, ValueError), msg:
+        except (IndexError, ValueError) as msg:
             raise IndexError(msg)
 
     def __iter__(self):
@@ -627,7 +628,7 @@ class Container(Struct):
     ##
     # 12.06.2007, c
     def print_names(self):
-        print [obj.name for obj in self._objs]
+        print([obj.name for obj in self._objs])
 
     def get_names(self):
         return [obj.name for obj in self._objs]
@@ -637,7 +638,7 @@ class Container(Struct):
         Return stored objects in a dictionary with object names as keys.
         """
         out = {}
-        for key, val in self.iteritems():
+        for key, val in self.items():
             out[key] = val
 
         return out
@@ -675,9 +676,9 @@ class OneTypeList(list):
             if ir:
                 return list.__getitem__(self, ir[0])
             else:
-                raise IndexError, ii
+                raise IndexError(ii)
         else:
-            raise IndexError, ii
+            raise IndexError(ii)
 
     def __str__(self):
         ss = "[\n"
@@ -700,7 +701,7 @@ class OneTypeList(list):
     ##
     # 12.06.2007, c
     def print_names(self):
-        print [ii.name for ii in self]
+        print([ii.name for ii in self])
 
     def get_names(self):
         return [ii.name for ii in self]
@@ -789,7 +790,7 @@ class Output(Struct):
             if msg.startswith('...'):
                 self.level -= 1
 
-            print self._prefix + ('  ' * self.level) + msg
+            print(self._prefix + ('  ' * self.level) + msg)
 
             if msg.endswith('...'):
                 self.level += 1
@@ -801,7 +802,7 @@ class Output(Struct):
             else:
                 fd = filename
 
-            print >>fd, self._prefix + ('  ' * self.level) + msg
+            print(self._prefix + ('  ' * self.level) + msg, file=fd)
 
             if isinstance(filename, basestr):
                 fd.close()
@@ -828,7 +829,7 @@ class Output(Struct):
             if msg.startswith('...'):
                 self.level -= 1
 
-            print self._prefix + ('  ' * self.level) + msg
+            print(self._prefix + ('  ' * self.level) + msg)
 
             print_to_file(filename, msg)
 
@@ -907,17 +908,17 @@ def print_structs(objs):
     """Print Struct instances in a container, works recursively. Debugging
     utility function."""
     if isinstance(objs, dict):
-        for key, vals in objs.iteritems():
-            print key
+        for key, vals in objs.items():
+            print(key)
             print_structs(vals)
     elif isinstance(objs, list):
         for vals in objs:
             print_structs(vals)
     else:
-        print objs
+        print(objs)
 
 def iter_dict_of_lists(dol, return_keys=False):
-    for key, vals in dol.iteritems():
+    for key, vals in dol.items():
         for ii, val in enumerate(vals):
             if return_keys:
                 yield key, ii, val
@@ -954,7 +955,7 @@ def dict_to_struct(*args, **kwargs):
             else:
                 aux = {}
 
-            for key, val in arg.iteritems():
+            for key, val in arg.items():
                 if type(val) == dict:
                     try:
                         flag[level + 1]
@@ -1001,7 +1002,7 @@ def insert_static_method(cls, function):
 # 23.10.2007, c
 def insert_method(instance, function):
     setattr(instance, function.__name__,
-             UnboundMethodType(function, instance, instance.__class__))
+             six.create_unbount_method(function, instance.__class__))
 
 def use_method_with_name(instance, method, new_name):
     setattr(instance, new_name, method)
@@ -1020,7 +1021,7 @@ def find_subclasses(context, classes, omit_unnamed=False, name_attr='name'):
                                         TimeSteppingSolver, EigenvalueSolver,
                                         OptimizationSolver])
     """
-    var_dict = context.items()
+    var_dict = list(context.items())
     table = {}
 
     for key, var in var_dict:
@@ -1107,7 +1108,7 @@ def update_dict_recursively(dst, src, tuples_too=False,
             if tuples_too and isinstance(dst[key], tuple) \
                    and isinstance(src[key], tuple):
                 dst[key] = tuple(map(tuplezip,
-                                     zip(src[key], dst[key]))[:len(dst[key])])
+                                     list(zip(src[key], dst[key])))[:len(dst[key])])
                 continue
 
         if overwrite_by_none or not src[key] is None:
@@ -1172,7 +1173,7 @@ def edit_dict_strings(str_dict, old, new, recur=False):
     """
     if isinstance(old, basestr):
         new_dict = {}
-        for key, val in str_dict.iteritems():
+        for key, val in str_dict.items():
             if isinstance(val, basestr):
                 new_dict[key] = val.replace(old, new)
 
@@ -1214,7 +1215,7 @@ def invert_dict(d, is_val_tuple=False, unique=True):
     """
     di = {}
 
-    for key, val in d.iteritems():
+    for key, val in d.items():
         if unique:
             if is_val_tuple:
                 for v in val:
@@ -1239,7 +1240,7 @@ def remap_dict(d, map):
     Utility function to remap state dict keys according to var_map.
     """
     out = {}
-    for new_key, key in map.iteritems():
+    for new_key, key in map.items():
         out[new_key] = d[key]
 
     return out
@@ -1260,7 +1261,7 @@ def dict_from_keys_init(keys, seq_class=None):
 ##
 # 16.10.2006, c
 def dict_extend(d1, d2):
-    for key, val in d1.iteritems():
+    for key, val in d1.items():
         val.extend(d2[key])
 
 def get_subdict(adict, keys):
@@ -1270,7 +1271,7 @@ def get_subdict(adict, keys):
     return dict((key, adict[key]) for key in keys if key in adict)
 
 def set_defaults(dict_, defaults):
-    for key, val in defaults.iteritems():
+    for key, val in defaults.items():
         dict_.setdefault(key, val)
 
 ##
@@ -1334,7 +1335,7 @@ def check_names(names1, names2, msg):
 # c: 27.02.2008, r: 27.02.2008
 def select_by_names(objs_all, names, replace=None, simple=True):
     objs = {}
-    for key, val in objs_all.iteritems():
+    for key, val in objs_all.items():
         if val.name in names:
             if replace is None:
                 objs[key] = val
@@ -1351,7 +1352,7 @@ def select_by_names(objs_all, names, replace=None, simple=True):
     return objs
 
 def ordered_iteritems(adict):
-    keys = adict.keys()
+    keys = list(adict.keys())
     order = nm.argsort(keys)
     for ii in order:
         key = keys[ii]
@@ -1362,7 +1363,7 @@ def dict_to_array(adict):
     Convert a dictionary of nD arrays of the same shapes with
     non-negative integer keys to a single (n+1)D array.
     """
-    keys = adict.keys()
+    keys = list(adict.keys())
     ik = nm.array(keys, dtype=nm.int32)
     assert_((ik >= 0).all())
 
@@ -1372,7 +1373,7 @@ def dict_to_array(adict):
     aux = nm.asarray(adict[ik[0]])
     out = nm.empty((ik.max() + 1,) + aux.shape, dtype=aux.dtype)
     out.fill(-1)
-    for key, val in adict.iteritems():
+    for key, val in adict.items():
         out[key] = val
 
     return out

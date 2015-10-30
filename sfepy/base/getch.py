@@ -68,7 +68,7 @@ class _GetchUnix:
 
 class _GetchDefault:
     def __call__(self):
-        return raw_input()[0]
+        return input()[0]
 
     def iskeydown(self):
         raise NotImplementedError
@@ -76,9 +76,9 @@ class _GetchDefault:
 getch = _Getch()
 
 if __name__ == '__main__':
-    from base import pause, spause
+    from .base import pause, spause
     
     pause('press a key anytime the script stops!')
     pause()
     spause('last time...')
-    print 'done.'
+    print('done.')

@@ -63,8 +63,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'SfePy'
-copyright = u'2014, Robert Cimrman and Contributors'
+project = 'SfePy'
+copyright = '2014, Robert Cimrman and Contributors'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -200,8 +200,8 @@ htmlhelp_basename = 'SfePydoc'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'SfePy.tex', u'SfePy Documentation',
-   u'Robert Cimrman and Contributors', 'manual'),
+  ('index', 'SfePy.tex', 'SfePy Documentation',
+   'Robert Cimrman and Contributors', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -274,13 +274,13 @@ def process_terms(app, what_, name, obj, options, lines):
         if issubclass(obj, Term) and len(obj.name):
             arg_types = obj.arg_types
             if ((len(arg_types) > 1) and not isinstance(arg_types[0], str)):
-                arg_types = [u', '.join(['%s' % arg for arg in arg_type])
+                arg_types = [', '.join(['%s' % arg for arg in arg_type])
                              for arg_type in arg_types]
-                at_lines = [u'``(%s)``' % arg_type for arg_type in arg_types]
+                at_lines = ['``(%s)``' % arg_type for arg_type in arg_types]
 
             else:
-                arg_types = u', '.join(['%s' % arg for arg in arg_types])
-                at_lines = [u'``(%s)``' % arg_types]
+                arg_types = ', '.join(['%s' % arg for arg in arg_types])
+                at_lines = ['``(%s)``' % arg_types]
 
             for ii, line in enumerate(lines):
                 if line.startswith(':Arguments'):
@@ -291,19 +291,19 @@ def process_terms(app, what_, name, obj, options, lines):
                 i0 = 0
 
             len0 = len(obj.name) + 4
-            lines.insert(i0+0, u'')
-            lines.insert(i0+1, u':Call signature:')
-            lines.insert(i0+2, u'')
-            lines.insert(i0+3, (u'=' * len0) + u' ===')
-            lines.insert(i0+4, u'**%s** %s' % (obj.name, at_lines[0]))
+            lines.insert(i0+0, '')
+            lines.insert(i0+1, ':Call signature:')
+            lines.insert(i0+2, '')
+            lines.insert(i0+3, ('=' * len0) + ' ===')
+            lines.insert(i0+4, '**%s** %s' % (obj.name, at_lines[0]))
             for ii, line in enumerate(at_lines[1:]):
-                lines.insert(i0+5+ii, u'..' + (' ' * (len0 - 1)) + line)
-            lines.insert(i0+4+len(at_lines), (u'=' * len0) + u' ===')
-            lines.insert(i0+5+len(at_lines), u'')
+                lines.insert(i0+5+ii, '..' + (' ' * (len0 - 1)) + line)
+            lines.insert(i0+4+len(at_lines), ('=' * len0) + ' ===')
+            lines.insert(i0+5+len(at_lines), '')
 
     # make sure there is a blank line at the end
     if lines and lines[-1]:
-        lines.append(u'')
+        lines.append('')
 
 
 def setup(app):

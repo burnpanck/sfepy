@@ -108,7 +108,7 @@ def cg_eigs(mtx, rhs=None, precond=None, i_max=None, eps_r=1e-10,
 
     norm_rs = [norm_r0]
 
-    for ii in xrange(i_max):
+    for ii in range(i_max):
         p = z + beta * p
         q = mtx * p
 

@@ -41,8 +41,8 @@ def main():
 
         log2(x*x*x, x=[x])
             
-    print log
-    print log2
+    print(log)
+    print(log2)
     pause()
 
     log(finished=True)

@@ -136,7 +136,7 @@ def store_top_u(displacements):
 
 def solve_branch(problem, branch_function):
     displacements = {}
-    for key, eq in problem.conf.equations.iteritems():
+    for key, eq in problem.conf.equations.items():
         problem.set_equations({key : eq})
 
         load = problem.get_materials()['load']
@@ -192,7 +192,7 @@ def main():
 
     # Join the branches.
     displacements = {}
-    for key in u_t.keys():
+    for key in list(u_t.keys()):
         displacements[key] = nm.r_[u_c[key][::-1], u_t[key]]
     load = nm.r_[load_c[::-1], load_t]
 
@@ -203,7 +203,7 @@ def main():
         output(load)
     else:
         legend = []
-        for key, val in displacements.iteritems():
+        for key, val in displacements.items():
             plt.plot(load, val)
             legend.append(key)
 

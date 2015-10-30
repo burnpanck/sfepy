@@ -45,15 +45,15 @@ def get_homog_coefs_linear(ts, coor, mode,
 
     out = {}
     if mode == None:
-        for key, val in coefs.__dict__.iteritems():
+        for key, val in coefs.__dict__.items():
             out[key] = val
 
     elif mode == 'qp':
-        for key, val in coefs.__dict__.iteritems():
+        for key, val in coefs.__dict__.items():
             if type( val ) == nm.ndarray or type(val) == nm.float64:
                 out[key] = nm.tile( val, (coor.shape[0], 1, 1) )
             elif type(val) == dict:
-                for key2, val2 in val.iteritems():
+                for key2, val2 in val.items():
                     if type(val2) == nm.ndarray or type(val2) == nm.float64:
                         out[key+'_'+key2] = \
                                           nm.tile(val2, (coor.shape[0], 1, 1))
@@ -77,11 +77,11 @@ def get_correctors_from_file( coefs_filename = 'coefs.h5',
 
     out = {}
 
-    for key, val in dump_names.iteritems():
+    for key, val in dump_names.items():
         corr_name = op.split( val )[-1]
         io = HDF5MeshIO( val+'.h5' )
         data = io.read_data( 0 )
-        dkeys = data.keys()
+        dkeys = list(data.keys())
         corr = {}
         for dk in dkeys:
             corr[dk] = data[dk].data.reshape(data[dk].shape)

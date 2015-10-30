@@ -17,7 +17,7 @@ def parse_definition(equation_def):
     """
     Parse equation definition string to create term description list.
     """
-    from parse_equations import create_bnf
+    from .parse_equations import create_bnf
 
     term_descs = []
     bnf = create_bnf(term_descs)
@@ -56,7 +56,7 @@ class Equations(Container):
         conf = copy(conf)
 
         ii = 0
-        for name, desc in conf.iteritems():
+        for name, desc in conf.items():
             if verbose:
                 output('equation "%s":' %  name)
                 output(desc)

@@ -103,7 +103,7 @@ def get_th_pars(ts, coors, mode=None, times=None, kernel=None, **kwargs):
         out['H0'] = kernel[0]
         out['Hd'] = kernel[1, 0, 0] / kernel[0, 0, 0]
 
-        for key, val in out.iteritems():
+        for key, val in out.items():
             out[key] = nm.tile(val, (coors.shape[0], 1, 1))
 
     return out

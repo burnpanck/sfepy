@@ -213,7 +213,7 @@ def plot_velocity(source, ctp, bbox, position, family, kind, name,
     streamline.update_streamlines = True
     streamline.seed.widget.enabled = widget_enabled
 
-    for key, val in kwargs.iteritems():
+    for key, val in kwargs.items():
         setattr(streamline.seed.widget, key, val)
 
     if color_name is None:

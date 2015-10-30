@@ -65,10 +65,10 @@ class Test( TestCommon ):
         return True
 
     def test_verbose_output(self):
-        import StringIO
+        import io
         from sfepy.base.base import Output, goptions
 
-        fd = StringIO.StringIO()
+        fd = io.StringIO()
 
         output = Output('test', filename=fd)
 

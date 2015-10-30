@@ -53,8 +53,8 @@ def approximate_exponential(x, y):
     coefs, ier = leastsq(fun, nm.array([c1, c2]), args=(x, y))
 
     if ier != 1:
-        print c1, c2
-        print coefs, ier
+        print(c1, c2)
+        print(coefs, ier)
         pause('exponential fit failed!')
 
     return coefs

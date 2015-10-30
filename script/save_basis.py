@@ -49,7 +49,7 @@ help = {
 
 def get_dofs(dofs, n_total):
     if dofs is None:
-        dofs = range(n_total)
+        dofs = list(range(n_total))
 
     else:
         dofs = [int(ii) for ii in dofs.split(',')]

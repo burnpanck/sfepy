@@ -191,7 +191,7 @@ def create_evaluable(expression, fields, materials, variables, integrals,
         regions = OneTypeList(Region, regions)
 
     else:
-        regions = fields[fields.keys()[0]].domain.regions
+        regions = fields[list(fields.keys())[0]].domain.regions
 
     # Create temporary variables.
     aux_vars = Variables(variables)
@@ -334,19 +334,19 @@ def eval_in_els_and_qp(expression, iels, coors,
     weights = nm.ones_like(coors[:, 0])
     integral = Integral('ie', coors=coors, weights=weights)
 
-    domain = fields.values()[0].domain
+    domain = list(fields.values())[0].domain
 
     region = Region('Elements', 'given elements', domain, '')
     region.cells = iels
     region.update_shape()
     domain.regions.append(region)
 
-    for field in fields.itervalues():
+    for field in fields.values():
         field.clear_mappings(clear_all=True)
         field.ap.clear_qp_base()
 
     aux = create_evaluable(expression, fields, materials,
-                           variables.itervalues(), Integrals([integral]),
+                           iter(variables.values()), Integrals([integral]),
                            functions=functions,
                            mode=mode, extra_args=extra_args, verbose=verbose,
                            kwargs=kwargs)
@@ -382,7 +382,7 @@ def assemble_by_blocks(conf_equations, problem, ebcs=None, epbcs=None,
         raise TypeError('bad BC!')
 
     matrices = {}
-    for key, mtx_term in conf_equations.iteritems():
+    for key, mtx_term in conf_equations.items():
         ks = key.split( ',' )
         mtx_name, var_names = ks[0], ks[1:]
         output( mtx_name, var_names )

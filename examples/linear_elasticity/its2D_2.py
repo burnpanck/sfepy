@@ -17,7 +17,7 @@ where
     \;.
 """
 
-from its2D_1 import *
+from .its2D_1 import *
 
 from sfepy.mechanics.matcoefs import stiffness_from_youngpoisson
 

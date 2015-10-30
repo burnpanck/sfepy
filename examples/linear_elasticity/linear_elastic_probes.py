@@ -1,12 +1,12 @@
 """
 This example shows how to use the post_process_hook to probe the output data.
 
-Find :math:`\ul{u}` such that:
+Find :math:`\\ul{u}` such that:
 
 .. math::
-    \int_{\Omega} D_{ijkl}\ e_{ij}(\ul{v}) e_{kl}(\ul{u})
+    \int_{\Omega} D_{ijkl}\ e_{ij}(\\ul{v}) e_{kl}(\\ul{u})
     = 0
-    \;, \quad \forall \ul{v} \;,
+    \;, \quad \forall \\ul{v} \;,
 
 where
 
@@ -18,7 +18,7 @@ where
 # Just grab the problem definition of linear_elastic.py.
 from copy import deepcopy
 
-from linear_elastic import *
+from .linear_elastic import *
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
 import os

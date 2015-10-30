@@ -1,6 +1,6 @@
 from sfepy.linalg import norm_l2_along_axis
 
-from quantum_common import common
+from .quantum_common import common
 
 def fun_v(ts, coor, mode=None, **kwargs):
     if not mode == 'qp': return

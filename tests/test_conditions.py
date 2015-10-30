@@ -12,7 +12,7 @@ def init_vec(variables):
 def check_vec(self, vec, ii, ok, conds, variables):
     from sfepy.discrete.common.dof_info import expand_nodes_to_equations
 
-    for var_name, var_conds in conds.group_by_variables().iteritems():
+    for var_name, var_conds in conds.group_by_variables().items():
         var = variables[var_name]
         for cond in var_conds:
             cond.canonize_dof_names(var.dofs)

@@ -15,7 +15,7 @@ from sfepy.discrete.fem import extend_cell_data
 from sfepy.linalg import norm_l2_along_axis
 from sfepy.homogenization.coefficients import Coefficients
 
-from band_gaps_conf import BandGapsRigidConf, get_pars, normalize
+from .band_gaps_conf import BandGapsRigidConf, get_pars, normalize
 
 normalize # Make pyflakes happy...
 
@@ -111,7 +111,7 @@ def _select_yr_circ(coors, domain=None, diameter=None):
 def post_process(out, problem, mtx_phi):
     var = problem.get_variables()['u']
 
-    for key in out.keys():
+    for key in list(out.keys()):
         ii = int(key[1:])
         vec = mtx_phi[:,ii].copy()
         var.set_data(vec)

@@ -222,12 +222,13 @@ def setup_package():
               url="http://sfepy.org",
               download_url=DOWNLOAD_URL,
               license='BSD',
-              classifiers=filter(None, CLASSIFIERS.split('\n')),
+              classifiers=[_f for _f in CLASSIFIERS.split('\n') if _f],
               platforms=["Linux", "Mac OS-X", 'Windows'],
               scripts=main_scripts,
               data_files=data_files,
               cmdclass=cmdclass,
-              configuration=configuration)
+              configuration=configuration,
+        )
 
     finally:
         del sys.path[0]

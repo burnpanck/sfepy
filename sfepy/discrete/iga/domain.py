@@ -32,7 +32,7 @@ class NurbsPatch(Struct):
         uk = nm.unique(self.knots[axis])
         indices = nm.searchsorted(uk[1:], pars)
         ref_coors = nm.empty_like(pars)
-        for ii in xrange(len(uk) - 1):
+        for ii in range(len(uk) - 1):
             ispan = nm.where(indices == ii)[0]
             pp = pars[ispan]
             ref_coors[ispan] = (pp - uk[ii]) / (uk[ii+1] - uk[ii])
@@ -180,7 +180,7 @@ class IGDomain(Domain):
 
         if regions is not None:
             self.vertex_set_bcs = {}
-            for key, val in self.regions.iteritems():
+            for key, val in self.regions.items():
                 self.vertex_set_bcs[key] = remap[val]
 
         self.reset_regions()

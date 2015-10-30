@@ -103,14 +103,12 @@ def conv_test(conf, it, err, err0):
 
     return status
 
-class Newton(NonlinearSolver):
+class Newton(NonlinearSolver, metaclass=SolverMeta):
     r"""
     Solves a nonlinear system :math:`f(x) = 0` using the Newton method with
     backtracking line-search, starting with an initial guess :math:`x^0`.
     """
     name = 'nls.newton'
-
-    __metaclass__ = SolverMeta
 
     _parameters = [
         ('i_max', 'int', 1, False,
@@ -347,7 +345,7 @@ class Newton(NonlinearSolver):
             if conf.verbose:
                 output('...done')
 
-            for kv in time_stats.iteritems():
+            for kv in time_stats.items():
                 output('%10s: %7.2f [s]' % kv)
 
             vec_e = mtx_a * vec_dx - vec_r
@@ -373,13 +371,11 @@ class Newton(NonlinearSolver):
 
         return vec_x
 
-class ScipyBroyden(NonlinearSolver):
+class ScipyBroyden(NonlinearSolver, metaclass=SolverMeta):
     """
     Interface to Broyden and Anderson solvers from ``scipy.optimize``.
     """
     name = 'nls.scipy_broyden_like'
-
-    __metaclass__ = SolverMeta
 
     _parameters = [
         ('method', 'str', 'anderson', False,
@@ -444,7 +440,7 @@ class ScipyBroyden(NonlinearSolver):
 
         return vec_x
 
-class PETScNonlinearSolver(NonlinearSolver):
+class PETScNonlinearSolver(NonlinearSolver, metaclass=SolverMeta):
     """
     Interface to PETSc SNES (Scalable Nonlinear Equations Solvers).
 
@@ -458,8 +454,6 @@ class PETScNonlinearSolver(NonlinearSolver):
     <sfepy.parallel.evaluate.PETScParallelEvaluator>`.
     """
     name = 'nls.petsc'
-
-    __metaclass__ = SolverMeta
 
     _parameters = [
         ('method', 'str', 'newtonls', False,

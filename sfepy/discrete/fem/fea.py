@@ -2,8 +2,8 @@ import numpy as nm
 
 from sfepy.base.base import Struct, assert_
 from sfepy.discrete.fem.mappings import VolumeMapping, SurfaceMapping
-from poly_spaces import PolySpace
-from fe_surface import FESurface
+from .poly_spaces import PolySpace
+from .fe_surface import FESurface
 
 def set_mesh_coors(domain, fields, coors, update_fields=False, actual=False,
                    clear_all=True):
@@ -13,7 +13,7 @@ def set_mesh_coors(domain, fields, coors, update_fields=False, actual=False,
         domain.cmesh.coors[:] = coors
 
     if update_fields:
-        for field in fields.itervalues():
+        for field in fields.values():
             field.setup_coors(coors)
             field.clear_mappings(clear_all=clear_all)
 
@@ -87,7 +87,7 @@ class Interpolant(Struct):
 
     def get_n_nodes(self):
         nn = {}
-        for key, ps in self.poly_spaces.iteritems():
+        for key, ps in self.poly_spaces.items():
             nn[key] = ps.nodes.shape[0]
         return nn
 
@@ -235,7 +235,7 @@ class Approximation(Struct):
         """
         qpkey = (integral.order, key)
 
-        if not self.qp_coors.has_key(qpkey):
+        if qpkey not in self.qp_coors:
             interp = self.interp
             if (key[0] == 's'):
                 dim = interp.gel.dim - 1
@@ -259,7 +259,7 @@ class Approximation(Struct):
         _key = key if not from_geometry else 'g' + key
         bf_key = (integral.order, _key, derivative)
 
-        if not self.bf.has_key(bf_key):
+        if bf_key not in self.bf:
             if (iels is not None) and (self.ori is not None):
                 ori = self.ori[iels]
 
@@ -439,7 +439,7 @@ class SurfaceApproximation(Approximation):
         assert_(key[0] == 's')
         qpkey = (integral.order, key)
 
-        if not self.qp_coors.has_key(qpkey):
+        if qpkey not in self.qp_coors:
             interp = self.interp
             geometry = interp.gel.name
 

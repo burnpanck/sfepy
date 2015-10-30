@@ -98,7 +98,7 @@ def rotate_yz(ts, coor, **kwargs):
     vec = coor[:,1:3] - centre
 
     angle = 10.0 * ts.step
-    print 'angle:', angle
+    print('angle:', angle)
 
     mtx = rotation_matrix2d( angle )
     vec_rotated = nm.dot( vec, mtx )

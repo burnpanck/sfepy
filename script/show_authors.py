@@ -33,7 +33,7 @@ def main():
 
     for line in unique:
         record = counts[line]
-        print('%6d %s %s' % (record[0], line, ', '.join(record[1:])))
+        print(('%6d %s %s' % (record[0], line, ', '.join(record[1:]))))
 
 if __name__ == '__main__':
     main()

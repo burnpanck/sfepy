@@ -1,4 +1,4 @@
-from quantum_common import common
+from .quantum_common import common
 
 def fun_v(ts, coor, mode=None, **kwargs):
     from numpy import zeros_like

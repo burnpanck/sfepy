@@ -39,7 +39,7 @@ class HyperElasticULBase(HyperElasticBase):
             'green_strain' : (n_el, n_qp, sym, 1),
         }
         data = Struct(name='ul_family_data')
-        for key, shape in shapes.iteritems():
+        for key, shape in shapes.items():
             setattr(data, key, nm.zeros(shape, dtype=nm.float64))
 
         self.family_function(data.mtx_f,

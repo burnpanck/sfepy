@@ -38,7 +38,7 @@ class HyperElasticTLBase(HyperElasticBase):
             'green_strain' : (n_el, n_qp, sym, 1),
         }
         data = Struct(name='tl_family_data')
-        for key, shape in shapes.iteritems():
+        for key, shape in shapes.items():
             setattr(data, key, nm.zeros(shape, dtype=nm.float64))
 
         self.family_function(data.mtx_f,
@@ -396,7 +396,7 @@ class HyperElasticSurfaceTLBase(HyperElasticBase):
             'inv_f' : (n_el, n_qp, dim, dim),
         }
         data = Struct(name='tl_surface_family_data')
-        for key, shape in shapes.iteritems():
+        for key, shape in shapes.items():
             setattr(data, key, nm.zeros(shape, dtype=nm.float64))
 
         self.family_function(data.mtx_f,

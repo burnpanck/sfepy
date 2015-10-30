@@ -8,7 +8,7 @@ from sfepy.solvers.solvers import SolverMeta, TimeSteppingSolver
 from sfepy.discrete.mass_operator import MassOperator
 from sfepy.solvers.ts import TimeStepper, VariableTimeStepper
 
-class StationarySolver(TimeSteppingSolver):
+class StationarySolver(TimeSteppingSolver, metaclass=SolverMeta):
     """
     Solver for stationary problems without time stepping.
 
@@ -16,8 +16,6 @@ class StationarySolver(TimeSteppingSolver):
     solvers also for stationary problems.
     """
     name = 'ts.stationary'
-
-    __metaclass__ = SolverMeta
 
     def __init__(self, conf, **kwargs):
         TimeSteppingSolver.__init__(self, conf, ts=None, **kwargs)
@@ -44,18 +42,16 @@ class StationarySolver(TimeSteppingSolver):
 
 def replace_virtuals(deps, pairs):
     out = {}
-    for key, val in deps.iteritems():
+    for key, val in deps.items():
         out[pairs[key]] = val
 
     return out
 
-class EquationSequenceSolver(TimeSteppingSolver):
+class EquationSequenceSolver(TimeSteppingSolver, metaclass=SolverMeta):
     """
     Solver for stationary problems with an equation sequence.
     """
     name = 'ts.equation_sequence'
-
-    __metaclass__ = SolverMeta
 
     def __init__(self, conf, **kwargs):
         TimeSteppingSolver.__init__(self, conf, ts=None, **kwargs)
@@ -306,13 +302,11 @@ def adapt_time_step(ts, status, adt, problem=None):
 
     return is_break
 
-class SimpleTimeSteppingSolver(TimeSteppingSolver):
+class SimpleTimeSteppingSolver(TimeSteppingSolver, metaclass=SolverMeta):
     """
     Implicit time stepping solver with a fixed time step.
     """
     name = 'ts.simple'
-
-    __metaclass__ = SolverMeta
 
     _parameters = [
         ('t0', 'float', 0.0, False,
@@ -392,13 +386,11 @@ class SimpleTimeSteppingSolver(TimeSteppingSolver):
 
         return state
 
-class ExplicitTimeSteppingSolver(SimpleTimeSteppingSolver):
+class ExplicitTimeSteppingSolver(SimpleTimeSteppingSolver, metaclass=SolverMeta):
     """
     Explicit time stepping solver with a fixed time step.
     """
     name = 'ts.explicit'
-
-    __metaclass__ = SolverMeta
 
     _parameters = SimpleTimeSteppingSolver._parameters + [
         ('mass', 'term', None, True,
@@ -421,7 +413,7 @@ class ExplicitTimeSteppingSolver(SimpleTimeSteppingSolver):
 
         return state
 
-class AdaptiveTimeSteppingSolver(SimpleTimeSteppingSolver):
+class AdaptiveTimeSteppingSolver(SimpleTimeSteppingSolver, metaclass=SolverMeta):
     """
     Implicit time stepping solver with an adaptive time step.
 
@@ -429,8 +421,6 @@ class AdaptiveTimeSteppingSolver(SimpleTimeSteppingSolver):
     step.
     """
     name = 'ts.adaptive'
-
-    __metaclass__ = SolverMeta
 
     _parameters = SimpleTimeSteppingSolver._parameters + [
         ('adapt_fun', 'callable(ts, status, adt, problem)', None, False,

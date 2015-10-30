@@ -4,6 +4,7 @@ from sfepy.base.base import assert_
 from sfepy.discrete.fem.utils import prepare_remap, prepare_translate
 from sfepy.discrete.common.dof_info import expand_nodes_to_dofs
 from sfepy.discrete.fem.fields_base import VolumeField, H1Mixin
+import collections
 
 class H1HierarchicVolumeField(H1Mixin, VolumeField):
     family_name = 'volume_H1_lobatto'
@@ -206,7 +207,7 @@ class H1HierarchicVolumeField(H1Mixin, VolumeField):
             vals[:gnods[0].shape[0] * dpn] = fun
 
 
-        elif callable(fun):
+        elif isinstance(fun, collections.Callable):
             vv = fun(self.get_coor(gnods[0]))
 
             vals = nm.zeros(n_dof, dtype=vv.dtype)

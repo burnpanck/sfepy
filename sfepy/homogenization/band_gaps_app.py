@@ -22,7 +22,7 @@ def try_set_defaults(obj, attr, defaults, recur=False):
 
     else:
         if recur and isinstance(values, dict):
-            for key, val in values.iteritems():
+            for key, val in values.items():
                 set_defaults(val, defaults)
 
         else:
@@ -209,7 +209,7 @@ def plot_gaps(fig_num, plot_rsc, gaps, kinds, freq_range,
     else:
         ax = fig.gca()
 
-    for ii in xrange(len(freq_range) - 1):
+    for ii in range(len(freq_range) - 1):
         f0, f1 = freq_range[[ii, ii+1]]
         gap = gaps[ii]
 
@@ -384,7 +384,7 @@ class AcousticBandGapsApp(HomogenizationApp):
         elif options.analyze_dispersion or options.phase_velocity:
 
             # Insert incident wave direction to coefficients that need it.
-            for key, val in coef_info.iteritems():
+            for key, val in coef_info.items():
                 coef_opts = val.get('options', None)
                 if coef_opts is None: continue
 

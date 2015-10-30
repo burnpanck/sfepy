@@ -49,14 +49,12 @@ def standard_call(call):
 
     return _standard_call
 
-class ScipyEigenvalueSolver(EigenvalueSolver):
+class ScipyEigenvalueSolver(EigenvalueSolver, metaclass=SolverMeta):
     """
     SciPy-based solver for both dense and sparse problems (if `n_eigs`
     is given).
     """
     name = 'eig.scipy'
-
-    __metaclass__ = SolverMeta
 
     _parameters = [
         ('method', "{'eig', 'eigh'}", 'eig', False,
@@ -110,13 +108,11 @@ class ScipyEigenvalueSolver(EigenvalueSolver):
 
         return out
 
-class ScipySGEigenvalueSolver(EigenvalueSolver):
+class ScipySGEigenvalueSolver(EigenvalueSolver, metaclass=SolverMeta):
     """
     SciPy-based solver for dense symmetric problems.
     """
     name = 'eig.sgscipy'
-
-    __metaclass__ = SolverMeta
 
     def __init__(self, conf, **kwargs):
         EigenvalueSolver.__init__(self, conf, **kwargs)
@@ -172,13 +168,11 @@ class ScipySGEigenvalueSolver(EigenvalueSolver):
 
         return out
 
-class LOBPCGEigenvalueSolver(EigenvalueSolver):
+class LOBPCGEigenvalueSolver(EigenvalueSolver, metaclass=SolverMeta):
     """
     SciPy-based LOBPCG solver for sparse symmetric problems.
     """
     name = 'eig.scipy_lobpcg'
-
-    __metaclass__ = SolverMeta
 
     _parameters = [
         ('i_max', 'int', 20, False,
@@ -221,13 +215,11 @@ class LOBPCGEigenvalueSolver(EigenvalueSolver):
 
         return out
 
-class PysparseEigenvalueSolver(EigenvalueSolver):
+class PysparseEigenvalueSolver(EigenvalueSolver, metaclass=SolverMeta):
     """
     Pysparse-based eigenvalue solver for sparse symmetric problems.
     """
     name = 'eig.pysparse'
-
-    __metaclass__ = SolverMeta
 
     _parameters = [
         ('i_max', 'int', 100, False,
@@ -252,7 +244,7 @@ class PysparseEigenvalueSolver(EigenvalueSolver):
     def _convert_mat(mtx):
         from pysparse import spmatrix
         A = spmatrix.ll_mat(*mtx.shape)
-        for i in xrange(mtx.indptr.shape[0] - 1):
+        for i in range(mtx.indptr.shape[0] - 1):
             ii = slice(mtx.indptr[i], mtx.indptr[i+1])
             n_in_row = ii.stop - ii.start
             A.update_add_at(mtx.data[ii], [i] * n_in_row, mtx.indices[ii])

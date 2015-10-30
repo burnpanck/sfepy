@@ -93,7 +93,7 @@ class SolverMeta(type):
 
         return super(SolverMeta, cls).__new__(cls, name, bases, ndict)
 
-class Solver(Struct):
+class Solver(Struct, metaclass=SolverMeta):
     """
     Base class for all solver kinds. Takes care of processing of common
     configuration options.
@@ -108,7 +108,6 @@ class Solver(Struct):
     Parameters
     ----------
     """
-    __metaclass__ = SolverMeta
 
     _parameters = [
         ('name', 'str', None, True,
@@ -146,7 +145,7 @@ class Solver(Struct):
 
         if allow_extra:
             all_keys = set(conf.to_dict().keys())
-            other = all_keys.difference(opts.to_dict().keys())
+            other = all_keys.difference(list(opts.to_dict().keys()))
             for name in other:
                 setattr(opts, name, get(name, None, None))
 
@@ -187,7 +186,7 @@ class Solver(Struct):
         std = set([ii[0] for ii in options if ii[0] != '*'])
 
         kwargs = {}
-        for key, val in conf.to_dict().iteritems():
+        for key, val in conf.to_dict().items():
             if key not in std:
                 kwargs[key] = val
 

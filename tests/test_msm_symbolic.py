@@ -81,7 +81,7 @@ solver_1 = {
 import numpy as nm
 try:
     import sfepy.linalg.sympy_operators as sops
-except ImportError, exc:
+except ImportError as exc:
     sops = None
 
 from sfepy.base.testing import TestCommon
@@ -135,12 +135,12 @@ class Test(TestCommon):
             self.report('  symbolic:', expr)
             self.report('  using argument map:', arg_map)
 
-            for sol_name, sol in sols.iteritems():
+            for sol_name, sol in sols.items():
                 rhs = self._eval_term(sol[1], term, sops)
                 srhs = "(%s * (%s))" % (term.sign, rhs)
                 rhss.setdefault(sol_name, []).append(srhs)
 
-        for key, val in rhss.iteritems():
+        for key, val in rhss.items():
             rhss[key] = '+'.join(val)
 
         return rhss
@@ -153,7 +153,7 @@ class Test(TestCommon):
                'y' : sops.Symbol('y'),
                'z' : sops.Symbol('z'),
                'dim' : dim}
-        for key, val in arg_map.iteritems():
+        for key, val in arg_map.items():
             if val == 'state':
                 env[key] = sol
             else:
@@ -183,7 +183,7 @@ class Test(TestCommon):
 
         problem  = self.problem
         ok = True
-        for eq_name, equation in equations.iteritems():
+        for eq_name, equation in equations.items():
             problem.set_equations({eq_name : equation})
             problem.update_materials()
 
@@ -196,7 +196,7 @@ class Test(TestCommon):
             materials = problem.get_materials()
             rhs_mat = materials['rhs']
 
-            for sol_name, sol in problem.conf.solutions.iteritems():
+            for sol_name, sol in problem.conf.solutions.items():
                 self.report('testing', sol_name)
                 var_name, sol_expr = sol
                 rhs_expr = rhss[sol_name]

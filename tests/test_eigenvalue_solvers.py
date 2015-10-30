@@ -95,7 +95,7 @@ class Test(TestCommon):
 
     def _list_eigenvalue_solvers(self, confs):
         d = []
-        for key, val in confs.iteritems():
+        for key, val in confs.items():
             if val.kind.find('eig.') == 0:
                 d.append(val)
         d.sort(key=lambda a: a.name)

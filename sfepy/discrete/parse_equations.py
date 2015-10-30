@@ -5,7 +5,7 @@ from pyparsing import Combine, Literal, Word, delimitedList, Group, Optional,\
 class TermParse(object):
     def __str__(self):
         ss = "%s\n" % self.__class__
-        for key, val in self.__dict__.iteritems():
+        for key, val in self.__dict__.items():
             ss += "  %s:\n    %s\n" % (key, self.__dict__[key])
         return ss
 
@@ -103,6 +103,6 @@ if __name__ == "__main__":
     bnf = create_bnf(term_descs)
     out = bnf.parseString(test_str)
 
-    print 'out:', out, '\n'
+    print('out:', out, '\n')
     for tp in term_descs:
-        print tp
+        print(tp)

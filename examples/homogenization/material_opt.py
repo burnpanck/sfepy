@@ -91,7 +91,7 @@ class MaterialOptimizer(object):
         val = 0.0
         aux = []
         for phi, exp_k in self.exp_data:
-            print 'phi = %d' % phi
+            print('phi = %d' % phi)
 
             mac_od['D_homog'] = self.rotate_mat(D, nm.deg2rad(phi))
             self.macro_app()
@@ -122,15 +122,15 @@ class MaterialOptimizer(object):
 
     def material_optimize(self):
         x0 = self.x0
-        bnds = zip(self.x_real2norm(self.x_L), self.x_real2norm(self.x_U))
+        bnds = list(zip(self.x_real2norm(self.x_L), self.x_real2norm(self.x_U)))
         feval = lambda x: self.matopt_eval(self.x_norm2real(x))
         istep = lambda x: self.iter_step(self.x_norm2real(x))
         self.iter_step(self.x_norm2real(x0), first_step=True)
 
-        print '>>> material optimization START <<<'
+        print('>>> material optimization START <<<')
         xopt = fmin_tnc(feval, x0, approx_grad=True, bounds=bnds,
                         xtol=1e-3, callback=istep)
-        print '>>> material optimization FINISHED <<<'
+        print('>>> material optimization FINISHED <<<')
 
         self.log(finished=True)
         return self.x_norm2real(xopt[0])
@@ -140,7 +140,7 @@ def main():
     micro_filename = srcdir + 'homogenization_opt.py'
     macro_filename = srcdir + 'linear_elasticity_opt.py'
 
-    exp_data = zip([0, 30, 60, 90], [1051140., 197330., 101226., 95474.])
+    exp_data = list(zip([0, 30, 60, 90], [1051140., 197330., 101226., 95474.]))
     mo = MaterialOptimizer(macro_filename, micro_filename,
                            [160.e9, 0.25, 5.e9, 0.45],
                            [120e9, 0.2, 2e9, 0.2],
@@ -148,7 +148,7 @@ def main():
                            exp_data)
 
     optim_par = mo.material_optimize()
-    print 'optimized parameters: ', optim_par
+    print('optimized parameters: ', optim_par)
 
 if __name__ == '__main__':
     main()

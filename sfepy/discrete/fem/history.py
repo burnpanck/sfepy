@@ -17,7 +17,7 @@ class Histories( Container ):
         ths = io.read_variables_time_history( var_names, ts )
 
         objs = OneTypeList( History )
-        for name, th in ths.iteritems():
+        for name, th in ths.items():
             hist = History( name,
                             steps = steps,
                             times = ts.times,

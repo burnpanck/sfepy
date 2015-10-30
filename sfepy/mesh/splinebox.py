@@ -1,5 +1,5 @@
 import numpy as nm
-from bspline import BSpline
+from .bspline import BSpline
 
 class SplineBox:
     """

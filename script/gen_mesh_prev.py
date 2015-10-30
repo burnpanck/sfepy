@@ -129,7 +129,7 @@ def main():
         else:
             fname_in = ii
 
-        print('writing %s...' % fname_out)
+        print(('writing %s...' % fname_out))
         gen_shot(fname_in, fname_out)
 
 if __name__ == "__main__":

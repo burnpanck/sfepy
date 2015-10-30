@@ -9,6 +9,7 @@ from sfepy.base.compat import in1d
 
 # Used for imports in term files.
 from sfepy.terms.extmods import terms
+from functools import reduce
 
 _match_args = re.compile('^([^\(\}]*)\((.*)\)$').match
 _match_virtual = re.compile('^virtual$').match
@@ -229,7 +230,7 @@ class Terms(Container):
 
     def __mul__(self, other):
         out = Terms()
-        for name, term in self.iteritems():
+        for name, term in self.items():
             out.append(term * other)
 
         return out
@@ -689,7 +690,7 @@ class Term(Struct):
         region = self.get_region()
         if region is not None:
             is_any_trace = reduce(lambda x, y: x or y,
-                                  self.arg_traces.values())
+                                  list(self.arg_traces.values()))
             if is_any_trace:
                 region.setup_mirror_region()
 
@@ -867,11 +868,11 @@ class Term(Struct):
                 self.integration = self._integration[self.mode]
 
             if self.integration is not None:
-                for arg_type, gtype in self.integration.iteritems():
+                for arg_type, gtype in self.integration.items():
                     var = self.get_args(arg_types=[arg_type])[0]
                     self.geometry_types[var.name] = gtype
 
-        gtypes = list(set(self.geometry_types.itervalues()))
+        gtypes = list(set(self.geometry_types.values()))
 
         if 'surface_extra' in gtypes:
             self.dof_conn_type = 'volume'

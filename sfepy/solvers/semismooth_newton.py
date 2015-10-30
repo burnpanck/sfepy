@@ -9,7 +9,7 @@ from sfepy.solvers.solvers import SolverMeta
 from sfepy.solvers.nls import Newton, conv_test
 from sfepy.linalg import compose_sparse
 
-class SemismoothNewton(Newton):
+class SemismoothNewton(Newton, metaclass=SolverMeta):
     r"""
     The semi-smooth Newton method for solving problems of the following
     structure:
@@ -31,8 +31,6 @@ class SemismoothNewton(Newton):
     uninitialized, but pre-allocated.
     """
     name = 'nls.semismooth_newton'
-
-    __metaclass__ = SolverMeta
 
     _parameters = [
         ('semismooth', 'bool', True, False,
@@ -240,7 +238,7 @@ class SemismoothNewton(Newton):
 
             time_stats['solve'] = time.clock() - tt
 
-            for kv in time_stats.iteritems():
+            for kv in time_stats.items():
                 output('%10s: %7.2f [s]' % kv)
 
             vec_x -= vec_dx

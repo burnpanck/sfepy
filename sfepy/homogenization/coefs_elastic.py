@@ -14,7 +14,7 @@ class CorrectorsPermeability( CorrDim ):
         problem = get_default( problem, self.problem )
 
         equations = {}
-        for key, eq in self.equations.iteritems():
+        for key, eq in self.equations.items():
             equations[key] = eq % tuple( self.regions )
 
         index = [0]
@@ -59,7 +59,7 @@ class PressureRHSVector( CorrMiniApp ):
         state = problem.create_state()
         state.apply_ebc()
 
-        vec = eval_term_op( state, self.equations.values()[0],
+        vec = eval_term_op( state, list(self.equations.values())[0],
                             problem, dw_mode = 'vector' )
 ##         print vec.max(), vec.min()
 

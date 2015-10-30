@@ -184,7 +184,7 @@ class NoPenetrationOperator(MRLCBCOperator):
         data = []
         rows = []
         cols = []
-        for idim in xrange(dim):
+        for idim in range(dim):
             ic = nm.where(ii == idim)[0]
             if len(ic) == 0: continue
 
@@ -194,8 +194,8 @@ class NoPenetrationOperator(MRLCBCOperator):
                 nn[:,ik] = - normals[ic,il] / normals[ic,idim]
 
             irn = dim * ic + idim
-            ics = [(dim - 1) * ic + ik for ik in xrange(dim - 1)]
-            for ik in xrange(dim - 1):
+            ics = [(dim - 1) * ic + ik for ik in range(dim - 1)]
+            for ik in range(dim - 1):
                 rows.append(irn)
                 cols.append(ics[ik])
                 data.append(nn[:,ik])
@@ -274,7 +274,7 @@ class EdgeDirectionOperator(NormalDirectionOperator):
     .. math::
         [u_1, u_2, u_3]^T = [d_1, d_2, d_3]^T w,
 
-    where :math:`\ul{d}` is an edge direction vector averaged into a node. The
+    where :math:`\\ul{d}` is an edge direction vector averaged into a node. The
     new DOF is :math:`w`.
     """
     kind = 'edge_direction'
@@ -379,7 +379,7 @@ class NodalLCOperator(MRLCBCOperator):
             ifixed = []
             islaves = set()
             ccs = []
-            for key, _poly in sol.iteritems():
+            for key, _poly in sol.items():
                 imaster = int(key.name[1:])
                 imasters.append(imaster)
 
@@ -599,20 +599,20 @@ class LCBCOperators(Container):
             ics.setdefault(op.var_names[0], []).append((ii, op.n_new_dof))
 
         self.ics = {}
-        for key, val in ics.iteritems():
-            iis, ics = zip(*val)
+        for key, val in ics.items():
+            iis, ics = list(zip(*val))
             self.ics[key] = (iis, nm.cumsum(nm.r_[0, ics]))
 
         self.n_free = {}
         self.n_active = {}
         n_dof = self.variables.adi.n_dof
-        for key in self.n_master.iterkeys():
+        for key in self.n_master.keys():
             self.n_free[key] = n_dof[key] - self.n_master[key]
             self.n_active[key] = self.n_free[key] + self.n_new[key]
 
         def _dict_to_di(name, dd):
             di = DofInfo(name)
-            for key, val in dd.iteritems():
+            for key, val in dd.items():
                 di.append_raw(key, val)
             return di
 
@@ -645,10 +645,10 @@ class LCBCOperators(Container):
         if len(self) == 0: return (None,) * 3
 
         n_dof = self.variables.adi.ptr[-1]
-        n_constrained = nm.sum([val for val in self.n_master.itervalues()])
-        n_dof_free = nm.sum([val for val in self.n_free.itervalues()])
-        n_dof_new = nm.sum([val for val in self.n_new.itervalues()])
-        n_dof_active = nm.sum([val for val in self.n_active.itervalues()])
+        n_constrained = nm.sum([val for val in self.n_master.values()])
+        n_dof_free = nm.sum([val for val in self.n_free.values()])
+        n_dof_new = nm.sum([val for val in self.n_new.values()])
+        n_dof_active = nm.sum([val for val in self.n_active.values()])
 
         output('dofs: total %d, free %d, constrained %d, new %d'\
                % (n_dof, n_dof_free, n_constrained, n_dof_new))

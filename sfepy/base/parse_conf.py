@@ -10,7 +10,7 @@ word_free = Word(alphas + '][@_-/.+**' + alphanums)
 word_strict = Word(alphas, alphas + alphanums + '_' )
 
 (lparen, rparen, lbrack, rbrack,
- lbrace, rbrace, colon, equal_sign) = map(Suppress, '()[]{}:=')
+ lbrace, rbrace, colon, equal_sign) = list(map(Suppress, '()[]{}:='))
 
 integer = Combine(Optional(oneOf('+ -')) + Word(nums)).setName('integer')
 cvt_int = lambda toks: int(toks[0])

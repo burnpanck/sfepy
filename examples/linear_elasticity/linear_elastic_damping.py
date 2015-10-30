@@ -19,12 +19,12 @@ where
 from copy import deepcopy
 
 import numpy as nm
-from linear_elastic import \
+from .linear_elastic import \
      filename_mesh, materials, regions, fields, ebcs, \
      integrals, solvers
 
 def print_times(problem, state):
-    print nm.array(problem.ts.times)
+    print(nm.array(problem.ts.times))
 
 options = {
     'ts' : 'ts',

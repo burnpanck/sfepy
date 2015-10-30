@@ -32,7 +32,7 @@ class ValidatedDict(dict):
     A dictionary object including validation.
     """
     validate = dict([(key, validator) for key, (default, validator) in \
-                     default_goptions.iteritems()])
+                     default_goptions.items()])
 
     def __setitem__(self, key, val):
         try:
@@ -55,7 +55,7 @@ class ValidatedDict(dict):
         """
         Return values in order of sorted keys.
         """
-        return [self[key] for key in self.keys()]
+        return [self[key] for key in list(self.keys())]
 
 goptions = ValidatedDict([(key, val[0])
-                          for key, val in default_goptions.iteritems()])
+                          for key, val in default_goptions.items()])

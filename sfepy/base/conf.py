@@ -14,6 +14,7 @@ from sfepy.base.base import (Struct, IndexedStruct, dict_to_struct,
                              output, copy, update_dict_recursively,
                              import_file, assert_, get_default, basestr)
 from sfepy.base.parse_conf import create_bnf
+import collections
 
 _required = ['filename_mesh|filename_domain', 'field_[0-9]+|fields',
              'ebc_[0-9]+|ebcs', 'equations',
@@ -41,7 +42,7 @@ def tuple_to_conf(name, vals, order):
 
 def transform_variables(adict):
     d2 = {}
-    for ii, (key, conf) in enumerate(adict.iteritems()):
+    for ii, (key, conf) in enumerate(adict.items()):
         if isinstance(conf, tuple):
             c2 = tuple_to_conf(key, conf, ['kind', 'field'])
             if len(conf) >= 3:
@@ -66,7 +67,7 @@ def transform_variables(adict):
 
 def transform_conditions(adict, prefix):
     d2 = {}
-    for ii, (key, conf) in enumerate(adict.iteritems()):
+    for ii, (key, conf) in enumerate(adict.items()):
         if isinstance(conf, tuple):
             if len(conf) == 2:
                 c2 = tuple_to_conf(key, conf, ['region', 'dofs'])
@@ -90,7 +91,7 @@ def transform_ics(adict):
 
 def transform_lcbcs(adict):
     d2 = {}
-    for ii, (key, conf) in enumerate(adict.iteritems()):
+    for ii, (key, conf) in enumerate(adict.items()):
         if isinstance(conf, tuple):
             if len(conf) >= 4:
                 if isinstance(conf[1], dict):
@@ -120,7 +121,7 @@ def transform_lcbcs(adict):
 
 def transform_epbcs(adict):
     d2 = {}
-    for ii, (key, conf) in enumerate(adict.iteritems()):
+    for ii, (key, conf) in enumerate(adict.items()):
         if isinstance(conf, tuple):
             if len(conf) == 3:
                 c2 = tuple_to_conf(key, conf, ['region', 'dofs', 'match'])
@@ -137,7 +138,7 @@ def transform_epbcs(adict):
 
 def transform_regions(adict):
     d2 = {}
-    for ii, (key, conf) in enumerate(adict.iteritems()):
+    for ii, (key, conf) in enumerate(adict.items()):
         if isinstance(conf, basestr):
             c2 = Struct(name=key, select=conf)
             d2['region_%s__%d' % (c2.name, ii)] = c2
@@ -153,7 +154,7 @@ def transform_regions(adict):
 
 def transform_integrals(adict):
     d2 = {}
-    for ii, (key, conf) in enumerate(adict.iteritems()):
+    for ii, (key, conf) in enumerate(adict.items()):
         if isinstance(conf, int):
             c2 = Struct(name=key, order=conf)
             d2['integral_%s__%d' % (c2.name, ii)] = c2
@@ -177,7 +178,7 @@ def transform_integrals(adict):
 def transform_fields(adict):
     dtypes = {'real' : nm.float64, 'complex' : nm.complex128}
     d2 = {}
-    for ii, (key, conf) in enumerate(adict.iteritems()):
+    for ii, (key, conf) in enumerate(adict.items()):
         if isinstance(conf, tuple):
             c2 = tuple_to_conf(key, conf,
                                ['dtype', 'shape', 'region', 'approx_order',
@@ -195,7 +196,7 @@ def transform_fields(adict):
 
 def transform_materials(adict):
     d2 = {}
-    for ii, (key, conf) in enumerate(adict.iteritems()):
+    for ii, (key, conf) in enumerate(adict.items()):
         if isinstance(conf, basestr):
             c2 = Struct(name=key, function=conf)
             d2['material_%s__%d' % (c2.name, ii)] = c2
@@ -215,10 +216,10 @@ def transform_materials(adict):
 
 def transform_solvers(adict):
     d2 = {}
-    for ii, (key, conf) in enumerate(adict.iteritems()):
+    for ii, (key, conf) in enumerate(adict.items()):
         if isinstance(conf, tuple):
             c2 = tuple_to_conf(key, conf, ['kind','params'])
-            for param, val in c2.params.iteritems():
+            for param, val in c2.params.items():
                 setattr(c2, param, val)
             delattr(c2, 'params')
             d2['solvers_%s__%d' % (c2.name, ii)] = c2
@@ -229,7 +230,7 @@ def transform_solvers(adict):
 
 def transform_functions(adict):
     d2 = {}
-    for ii, (key, conf) in enumerate(adict.iteritems()):
+    for ii, (key, conf) in enumerate(adict.items()):
         if isinstance(conf, tuple):
             c2 = tuple_to_conf(key, conf, ['function'])
             d2['function_%s__%d' % (c2.name, ii)] = c2
@@ -424,7 +425,7 @@ class ProblemConf(Struct):
 
         self.transform_input_trivial()
         self._raw = {}
-        for key, val in define_dict.iteritems():
+        for key, val in define_dict.items():
             if isinstance(val, dict):
                 self._raw[key] = copy(val)
 
@@ -432,7 +433,7 @@ class ProblemConf(Struct):
         self.funmod = funmod
 
     def _validate_helper(self, items, but_nots):
-        keys = self.__dict__.keys()
+        keys = list(self.__dict__.keys())
         left_over = keys[:]
         if but_nots is not None:
             for item in but_nots:
@@ -478,11 +479,11 @@ class ProblemConf(Struct):
         tr_list = ['([a-zA-Z0-9]+)_[0-9]+']
         # Keywords not in 'required', but needed even empty (e.g. for
         # running tests).
-        for key in transforms.keys():
-            if not self.__dict__.has_key(key):
+        for key in list(transforms.keys()):
+            if key not in self.__dict__:
                 self.__dict__[key] = {}
 
-        keys = self.__dict__.keys()
+        keys = list(self.__dict__.keys())
         for item in tr_list:
             match = re.compile(item).match
             for key in keys:
@@ -498,8 +499,8 @@ class ProblemConf(Struct):
                     del self.__dict__[key]
 
     def transform_input(self):
-        keys = self.__dict__.keys()
-        for key, transform in transforms.iteritems():
+        keys = list(self.__dict__.keys())
+        for key, transform in transforms.items():
             if not key in keys: continue
             self.__dict__[key] = transform(self.__dict__[key])
 
@@ -515,7 +516,7 @@ class ProblemConf(Struct):
         by `key`.
         """
         val = getattr(self, key)
-        for item in val.itervalues():
+        for item in val.values():
             if item.name == item_name:
                 return item
 
@@ -539,7 +540,7 @@ class ProblemConf(Struct):
         if name is None:
             fun = None
 
-        elif callable(name):
+        elif isinstance(name, collections.Callable):
             import inspect
             if not (inspect.isfunction(name) or inspect.ismethod(name)):
                 msg = '`name` has to have `str` or `function` type! (got %s)'
@@ -597,7 +598,7 @@ class ProblemConf(Struct):
             my = getattr(self, x, None)
             if isinstance(my, dict) and isinstance(his, dict):
                 for key in his:
-                    if not my.has_key(key):
+                    if key not in my:
                         my[key]=his[key]
             elif my is None:
                 setattr(self, x, his)

@@ -6,7 +6,7 @@ import numpy.linalg as nla
 from sfepy.base.base import output, get_default, Struct
 from sfepy.base.log import Log, get_logging_conf
 from sfepy.solvers.solvers import SolverMeta, NonlinearSolver
-from nls import conv_test
+from .nls import conv_test
 
 class StabilizationFunction(Struct):
     """
@@ -136,13 +136,11 @@ def scale_matrix(mtx, indx, factor):
     ptr1 = mtx.indptr[indx.stop]
     mtx.data[ptr0:ptr1] *= factor
 
-class Oseen(NonlinearSolver):
+class Oseen(NonlinearSolver, metaclass=SolverMeta):
     """
     The Oseen solver for Navier-Stokes equations.
     """
     name = 'nls.oseen'
-
-    __metaclass__ = SolverMeta
 
     _parameters = [
         ('stabil_mat', 'str', None, True,
@@ -316,7 +314,7 @@ class Oseen(NonlinearSolver):
             dx_norm = nla.norm(vec_dx)
             output('||dx||: %.2e' % dx_norm)
 
-            for kv in time_stats.iteritems():
+            for kv in time_stats.items():
                 output('%10s: %7.2f [s]' % kv)
 
             vec_x_prev = vec_x.copy()

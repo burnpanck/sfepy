@@ -111,7 +111,7 @@ class Test( TestCommon ):
     ##
     # c: 09.05.2007, r: 25.06.2008
     def _build_rhs( self, sols ):
-        for sol in sols.itervalues():
+        for sol in sols.values():
             assert_( len( sol ) == 3 )
         return sols
 
@@ -127,7 +127,7 @@ class Test( TestCommon ):
         sols = self._build_rhs( self.conf.solutions )
 
         ok = True
-        for sol_name, sol in sols.iteritems():
+        for sol_name, sol in sols.items():
             self.report( 'testing', sol_name )
             var_name, sol_expr, rhs_expr = sol
 

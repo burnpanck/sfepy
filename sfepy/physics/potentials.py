@@ -32,7 +32,7 @@ class CompoundPotential(Container):
 
     def __mul__(self, other):
         out = CompoundPotential()
-        for name, pot in self.iteritems():
+        for name, pot in self.items():
             out.append(pot * other)
 
         return out

@@ -112,10 +112,10 @@ def gen_patch_block_domain(dims, shape, centre, degrees, continuity=None,
     dd = centre - 0.5 * dims
     block = cad.grid(shape - 1, degree=degrees, continuity=continuity)
 
-    for ia in xrange(dim):
+    for ia in range(dim):
         block.scale(dims[ia], ia)
 
-    for ia in xrange(dim):
+    for ia in range(dim):
         block.translate(dd[ia], ia)
 
     if cp_mode == 'uniform':

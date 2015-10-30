@@ -98,7 +98,7 @@ def main():
     conf_dir = os.path.dirname(__file__)
     io = MeshIO.any_from_filename(filename_mesh, prefix_dir=conf_dir)
     bb = io.read_bounding_box()
-    outline = [vv for vv in la.combine(zip(*bb))]
+    outline = [vv for vv in la.combine(list(zip(*bb)))]
 
     ax = plot_points(None, nm.array(outline), 'r*')
     csc = materials['cs'][0]

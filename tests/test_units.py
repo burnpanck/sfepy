@@ -116,11 +116,11 @@ class Test(TestCommon):
         }
 
         ok = True
-        for unit_set, true_derived_units in u_sets.iteritems():
+        for unit_set, true_derived_units in u_sets.items():
             self.report('units:', unit_set)
             derived_units = get_consistent_unit_set(*unit_set)
 
-            for key, true_val in true_derived_units.iteritems():
+            for key, true_val in true_derived_units.items():
                 val = derived_units[key]
                 _ok = true_val == val
                 self.report('%s: %s == %s -> %s' % (key, true_val, val, _ok))

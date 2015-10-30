@@ -105,7 +105,7 @@ class Test(TestCommon):
         pb = self.problem
         for aux in test_terms:
             term_template, (prefix, par_name, d_vars, dw_vars) = aux
-            print term_template, prefix, par_name, d_vars, dw_vars
+            print(term_template, prefix, par_name, d_vars, dw_vars)
 
             term1 = term_template % ((prefix,) + d_vars)
 

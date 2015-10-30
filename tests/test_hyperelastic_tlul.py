@@ -23,7 +23,7 @@ class Test(TestCommon):
         solutions = {}
         ok = True
 
-        for hp, pb_filename in input_names.iteritems():
+        for hp, pb_filename in input_names.items():
 
             required, other = get_standard_keywords()
             input_name = op.join(op.dirname(__file__), pb_filename)

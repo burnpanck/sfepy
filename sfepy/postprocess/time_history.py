@@ -8,7 +8,7 @@ from sfepy.base.ioutils import get_trunk, write_dict_hdf5
 
 def _linearize(out, fields, linearization):
     new = {}
-    for key, val in out.iteritems():
+    for key, val in out.items():
         field = fields[val.field_name]
         new.update(field.create_output(val.data, var_name=key,
                                        dof_names=val.dofs, key=key,
@@ -25,7 +25,7 @@ def dump_to_vtk(filename, output_filename_trunk=None, step0=0, steps=None,
             output('linearizing...')
             out = _linearize(out, fields, linearization)
             output('...done')
-            for key, val in out.iteritems():
+            for key, val in out.items():
                 lmesh = val.get('mesh', mesh)
                 lmesh.write(output_filename_trunk + '_' + key + suffix,
                             io='auto', out={key : val})
@@ -63,7 +63,7 @@ def dump_to_vtk(filename, output_filename_trunk=None, step0=0, steps=None,
         if steps is None:
             ii0 = nm.searchsorted(all_steps, step0)
             iterator = ((all_steps[ii], times[ii])
-                        for ii in xrange(ii0, len(times)))
+                        for ii in range(ii0, len(times)))
 
         else:
             iterator = [(step, ts.times[step]) for step in steps]
@@ -139,7 +139,7 @@ def extract_time_history(filename, extract, verbose=True):
         aux = chunk.strip().split()
         pes.append(Struct(var=aux[0],
                           mode=aux[1],
-                          indx=map(int, aux[2:])))
+                          indx=list(map(int, aux[2:]))))
 
     ##
     # Verify array limits.
@@ -190,12 +190,12 @@ def extract_time_history(filename, extract, verbose=True):
 def average_vertex_var_in_cells(ths_in):
     """Average histories in the element nodes for each nodal variable
         originally requested in elements."""
-    ths = dict.fromkeys(ths_in.keys())
-    for var, th in ths_in.iteritems():
-        aux = dict.fromkeys(th.keys())
-        for ir, data in th.iteritems():
+    ths = dict.fromkeys(list(ths_in.keys()))
+    for var, th in ths_in.items():
+        aux = dict.fromkeys(list(th.keys()))
+        for ir, data in th.items():
             if isinstance(data, dict):
-                for ic, ndata in data.iteritems():
+                for ic, ndata in data.items():
                     if aux[ir] is None:
                         aux[ir] = ndata
                     else:

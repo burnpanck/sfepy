@@ -67,7 +67,7 @@ def setup_extra_data(conn_info):
 
 def fields_from_conf(conf, regions):
     fields = {}
-    for key, val in conf.iteritems():
+    for key, val in conf.items():
         field = Field.from_conf(val, regions)
         fields[field.name] = field
 

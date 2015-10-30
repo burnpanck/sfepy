@@ -78,11 +78,11 @@ def read_log(filename):
             if ls[0] == '# groups':
                 n_gr = int(ls[1])
                 for ig in range(n_gr):
-                    fd.next()
-                    line_info = fd.next()
+                    next(fd)
+                    line_info = next(fd)
                     xlabel, ylabel, yscales = line_info.split(',')
 
-                    line_names = fd.next()
+                    line_names = next(fd)
                     names = line_names.split(':')[1]
 
                     info[ig] = (xlabel.split(':')[1].strip().strip('"'),
@@ -115,7 +115,7 @@ def read_log(filename):
 
     fd.close()
 
-    for key, (xs, ys, vlines) in log.iteritems():
+    for key, (xs, ys, vlines) in log.items():
         log[key] = (nm.array(xs), nm.array(ys), nm.array(vlines))
 
     return log, info
@@ -157,7 +157,7 @@ def plot_log(fig_num, log, info, xticks=None, yticks=None):
     if yticks is None:
         yticks = [None] * n_gr
 
-    for ii, (xlabel, ylabel, yscale, names) in info.iteritems():
+    for ii, (xlabel, ylabel, yscale, names) in info.items():
         ax = fig.add_subplot(n_row, n_col, ii + 1)
         ax.set_yscale(yscale)
 
@@ -392,7 +392,7 @@ class Log(Struct):
                 if len(aux) == 1:
                     aux = aux[0]
                 else:
-                    raise ValueError, 'can log only scalars (%s)' % aux
+                    raise ValueError('can log only scalars (%s)' % aux)
             key = name_to_key(name, ii)
             self.data[key].append(aux)
 
@@ -465,7 +465,7 @@ class Log(Struct):
         to mark some events.
         """
         if igs is None:
-            igs = range(self.n_gr)
+            igs = list(range(self.n_gr))
 
         if self.plot_pipe is not None:
             send = self.plot_pipe.send

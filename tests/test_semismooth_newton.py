@@ -56,7 +56,7 @@ def eval_matrix(mtx, **kwargs):
 
 def convert_to_csr(m_in):
     m_out = {}
-    for key, mtx in m_in.iteritems():
+    for key, mtx in m_in.items():
         m_out[key] = sps.csr_matrix(mtx)
 
     return m_out

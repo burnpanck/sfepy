@@ -12,7 +12,7 @@ class Coefficients(Struct):
     def from_file_hdf5( filename ):
         obj = Coefficients()
         obj.__dict__ = read_dict_hdf5( filename )
-        for key, val in obj.__dict__.iteritems():
+        for key, val in obj.__dict__.items():
             if type( val ) == list:
                 for ii, vv in enumerate( val ):
                     val[ii] = nm.array( vv, dtype = nm.float64 )
@@ -55,8 +55,8 @@ class Coefficients(Struct):
         fd.write( '\n' )
         fd.write( r'    \left[\begin{array}{%s}' % ('c' * val.shape[0]) )
         fd.write( '\n' )
-        for ir in xrange( val.shape[1] ):
-            for ic in xrange( val.shape[0] ):
+        for ir in range( val.shape[1] ):
+            for ic in range( val.shape[0] ):
                 fd.write('    ' + self._format(val[ir,ic]))
                 if ic < (val.shape[0] - 1):
                     fd.write( r' & ' )
@@ -160,7 +160,7 @@ class Coefficients(Struct):
                     fd.write('\n')
 
                 elif val.ndim == 1:
-                    for ic in xrange(val.shape[0]):
+                    for ic in range(val.shape[0]):
                         fd.write(format % val[ic])
                         if ic < (val.shape[0] - 1):
                             fd.write(', ')
@@ -168,8 +168,8 @@ class Coefficients(Struct):
                             fd.write('\n')
 
                 elif val.ndim == 2:
-                    for ir in xrange(val.shape[0]):
-                        for ic in xrange(val.shape[1]):
+                    for ir in range(val.shape[0]):
+                        for ic in range(val.shape[1]):
                             fd.write(format % val[ir,ic])
                             if ic < (val.shape[1] - 1):
                                 fd.write(', ')
@@ -178,10 +178,10 @@ class Coefficients(Struct):
                     fd.write('\n')
 
                 elif val.ndim == 3:
-                    for ii in xrange(val.shape[0]):
+                    for ii in range(val.shape[0]):
                         fd.write('  step %d:\n' % ii)
-                        for ir in xrange(val.shape[1]):
-                            for ic in xrange(val.shape[2]):
+                        for ir in range(val.shape[1]):
+                            for ic in range(val.shape[2]):
                                 fd.write('  ' + format % val[ii,ir,ic])
                                 if ic < (val.shape[2] - 1):
                                     fd.write(', ')
@@ -263,7 +263,7 @@ ijkl & value \\
             out = format % val
         elif mode == 'vector':
             aux = ' \\\\\n'.join( [r'$_%d$ & %s' % (ir + 1, format % val[ir])
-                                   for ir in xrange( dim )] )
+                                   for ir in range( dim )] )
             out = self._table_vector % aux
         elif mode == 'matrix_t1d':
             aux = ' \\\\\n'.join( [r'$_{%d%d}$ & %s' % (ir + 1, ic + 1,
@@ -274,8 +274,8 @@ ijkl & value \\
         elif mode == 'matrix_2D':
             aux = ' \\\\\n'.join( [r'$_{%d%d}$ & %s' % (ir + 1, ic + 1,
                                                         format % val[ir,ic])
-                                  for ir in xrange( dim )
-                                  for ic in xrange( dim )] )
+                                  for ir in range( dim )
+                                  for ic in range( dim )] )
             out = self._table_matrix_1 % aux
         elif mode == 'matrix_t2d':
             aux = ' \\\\\n'.join( [r'$_{%d%d%d%d}$ & %s' % (irr + 1, irc + 1,
@@ -297,7 +297,7 @@ ijkl & value \\
 
         if isinstance( val, dict ):
             aux = ''
-            for key, dval in val.iteritems():
+            for key, dval in val.items():
                 aux2 = r'\item %s : %s' % (key,
                                            self._typeset( dval, dim, style,
                                                           format, step ))

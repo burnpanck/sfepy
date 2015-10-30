@@ -282,10 +282,10 @@ class BSpline:
                 self.eval_basis()
 
             else:
-                print 'knot insertion failed: multiplicity = spline degree!'
+                print('knot insertion failed: multiplicity = spline degree!')
 
         else:
-            print 'knot insertion failed: out of bounds!'
+            print('knot insertion failed: out of bounds!')
 
     def eval_basis(self, t=None, return_val=False):
         """

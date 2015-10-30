@@ -125,7 +125,7 @@ def typeset_term_table(fd, table):
 
     fd.write(header)
 
-    keys = table.keys()
+    keys = list(table.keys())
     sort_keys = [key[key.find('_'):] for key in keys]
     iis = nm.argsort(sort_keys)
     for ii in iis:

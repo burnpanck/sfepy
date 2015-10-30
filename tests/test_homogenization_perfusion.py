@@ -31,7 +31,7 @@ class Test(TestCommon):
 
         required, other = get_standard_keywords()
         required.remove('equations')
-        print input_name
+        print(input_name)
         full_name = op.join(op.dirname(__file__), input_name)
         test_conf = ProblemConf.from_file(full_name, required, other)
 
@@ -81,7 +81,7 @@ class Test(TestCommon):
         # S = S_test ?
         coefsd = coefs.to_dict()
         compare = []
-        for ii in coefsd.iterkeys():
+        for ii in coefsd.keys():
             if 'S_test' in ii:
                 ch = ii[6]
                 io = ii[-1]

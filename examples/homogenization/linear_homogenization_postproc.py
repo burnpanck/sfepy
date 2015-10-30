@@ -3,7 +3,7 @@ This example shows how to use the VTK postprocessing functions.
 """
 
 import os.path as osp
-from linear_homogenization import *
+from .linear_homogenization import *
 from sfepy.postprocess.utils_vtk import get_vtk_from_mesh,\
     get_vtk_by_group, get_vtk_surface, get_vtk_edges, write_vtk_to_file,\
     tetrahedralize_vtk_mesh

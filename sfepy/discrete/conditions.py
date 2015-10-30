@@ -50,7 +50,7 @@ class Conditions(Container):
     @staticmethod
     def from_conf(conf, regions):
         conds = []
-        for key, cc in conf.iteritems():
+        for key, cc in conf.items():
             times = cc.get('times', None)
 
             if 'ebc' in key:
@@ -172,7 +172,7 @@ class Condition(Struct):
         Create a single condition instance for each item in self.dofs
         and yield it.
         """
-        for dofs, val in self.dofs.iteritems():
+        for dofs, val in self.dofs.items():
             single_cond = self.copy(name=self.name)
             single_cond.is_single = True
             single_cond.dofs = [dofs, val]
@@ -219,7 +219,7 @@ class EssentialBC(Condition):
 
         else:
             new_dofs = {}
-            for key in self.dofs.iterkeys():
+            for key in self.dofs.keys():
                 new_dofs[key] = 0.0
 
             self.dofs = new_dofs

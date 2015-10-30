@@ -48,7 +48,7 @@ class Test(TestCommon):
 
         volumes = {}
         avg = 0.0
-        for key, term in expressions.items():
+        for key, term in list(expressions.items()):
             var_name = key[-1]
             field = self.problem.fields[field_map[var_name]]
             var = FieldVariable(var_name, 'parameter', field,
@@ -61,7 +61,7 @@ class Test(TestCommon):
 
         avg /= len(volumes)
 
-        for key, val in volumes.items():
+        for key, val in list(volumes.items()):
             err = nm.abs(avg - val) / nm.abs(avg)
             _ok = err < 1e-12
             self.report('"'"%s"'" - volume: %e' % (key, val))

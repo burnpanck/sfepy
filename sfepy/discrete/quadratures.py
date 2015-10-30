@@ -81,7 +81,7 @@ def get_actual_order(geometry, order):
     """
     table = quadrature_tables[geometry]
     if order not in table:
-        orders = table.keys()
+        orders = list(table.keys())
         ii = nm.searchsorted(orders, order)
         if ii >= len(orders):
             omax = max(orders)
@@ -819,8 +819,8 @@ del _QP
 
 def _get_max_orders():
     max_orders = {}
-    for key, table in quadrature_tables.iteritems():
-        orders = table.keys()
+    for key, table in quadrature_tables.items():
+        orders = list(table.keys())
         max_orders[key] = max(orders)
 
     return max_orders

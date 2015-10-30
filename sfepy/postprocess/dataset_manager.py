@@ -258,7 +258,7 @@ class DatasetManager(HasTraits):
         for type in types:
             attr = '%s_%s'%(category, type)
             d = getattr(self, attr)
-            if name in d.keys():
+            if name in list(d.keys()):
                 return type
         raise KeyError('No %s array named %s available in dataset'
                         %(category, name))

@@ -14,12 +14,13 @@ region-local field connectivity.
 import numpy as nm
 
 from sfepy.base.base import assert_
-import fea
+from . import fea
 from sfepy.discrete.fem.utils import prepare_remap
 from sfepy.discrete.common.dof_info import expand_nodes_to_dofs
 from sfepy.discrete.fem.facets import get_facet_dof_permutations
 from sfepy.discrete.fem.fields_base import (FEField, VolumeField, SurfaceField,
                                             H1Mixin)
+import collections
 
 class H1NodalMixin(H1Mixin):
 
@@ -153,7 +154,7 @@ class H1NodalMixin(H1Mixin):
         aux = self.get_dofs_in_region(region)
         nods = nm.unique(nm.hstack(aux))
 
-        if callable(fun):
+        if isinstance(fun, collections.Callable):
             vals = fun(self.get_coor(nods))
 
         elif nm.isscalar(fun):

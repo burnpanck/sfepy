@@ -7,7 +7,7 @@ class CorrRegion( CorrMiniApp ):
 
     def __init__( self, name, problem, kwargs ):
         CorrMiniApp.__init__( self, name, problem, kwargs )
-        self.set_default('Nreg', len(self.regions.values()[0]))
+        self.set_default('Nreg', len(list(self.regions.values())[0]))
         self.set_default('ebcs_list', False)
 
     def get_variables( self, ir, data ):
@@ -27,8 +27,8 @@ class CorrRegion( CorrMiniApp ):
 
             equations = {}
         
-            for keye, vale in self.equations.iteritems():
-                for keyr, valr in self.regions.iteritems():
+            for keye, vale in self.equations.items():
+                for keyr, valr in self.regions.items():
                     vale = vale.replace( keyr, valr[ir] )
             
                 equations[keye] = vale    
@@ -57,7 +57,7 @@ class CoefRegion( CoefN ):
 
     def __init__( self, name, problem, kwargs ):
         CoefN.__init__( self, name, problem, kwargs )
-        self.corr_dim = len(kwargs['regions'].values()[0])
+        self.corr_dim = len(list(kwargs['regions'].values())[0])
         
     def get_variables( self, problem, ir, data ):
 

@@ -34,7 +34,7 @@ where
     \lambda \ \delta_{ij} \delta_{kl}
     \;.
 """
-from biot_npbc import cinc_simple, define_regions, get_pars
+from .biot_npbc import cinc_simple, define_regions, get_pars
 
 def define():
     from sfepy import data_dir

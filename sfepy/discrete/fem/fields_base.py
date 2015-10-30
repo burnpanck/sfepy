@@ -15,7 +15,7 @@ import numpy as nm
 
 from sfepy.base.base import output, get_default, assert_
 from sfepy.base.base import Struct
-import fea
+from . import fea
 from sfepy.discrete.common.fields import parse_shape, Field
 from sfepy.discrete.fem.mesh import Mesh
 from sfepy.discrete.fem.meshio import convert_complex_output
@@ -793,7 +793,7 @@ class VolumeField(FEField):
         Setup the field region geometry.
         """
         cmesh = self.domain.cmesh
-        for key, gel in self.domain.geom_els.iteritems():
+        for key, gel in self.domain.geom_els.items():
             ct = cmesh.cell_types
             if (ct[self.region.cells] == cmesh.key_to_index[gel.name]).all():
                 self.gel = gel
@@ -996,7 +996,7 @@ class SurfaceField(FEField):
         """
         Setup the field region geometry.
         """
-        for key, vgel in self.domain.geom_els.iteritems():
+        for key, vgel in self.domain.geom_els.items():
             self.gel = vgel.surface_facet
             break
 

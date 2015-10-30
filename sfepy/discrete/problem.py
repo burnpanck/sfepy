@@ -10,13 +10,13 @@ from sfepy.base.base import output, get_default, Struct, IndexedStruct
 import sfepy.base.ioutils as io
 from sfepy.base.conf import ProblemConf, get_standard_keywords
 from sfepy.base.conf import transform_variables, transform_materials
-from functions import Functions
+from .functions import Functions
 from sfepy.discrete.fem.mesh import Mesh
 from sfepy.discrete.common.fields import fields_from_conf
-from variables import Variables, Variable
-from materials import Materials, Material
-from equations import Equations
-from integrals import Integrals
+from .variables import Variables, Variable
+from .materials import Materials, Material
+from .equations import Equations
+from .integrals import Integrals
 from sfepy.discrete.state import State
 from sfepy.discrete.conditions import Conditions
 from sfepy.discrete.evaluate import create_evaluable, eval_equations
@@ -136,7 +136,7 @@ class Problem(Struct):
                     fields[field.name] = field
 
             if domain is None:
-                domain = fields.values()[0].domain
+                domain = list(fields.values())[0].domain
 
             if conf is None:
                 self.conf = Struct(ebcs={}, epbcs={}, lcbcs={}, materials={})
@@ -427,11 +427,11 @@ class Problem(Struct):
         """
         conf_solvers = get_default(conf_solvers, self.conf.solvers)
         self.solver_confs = {}
-        for key, val in conf_solvers.iteritems():
+        for key, val in conf_solvers.items():
             self.solver_confs[val.name] = val
 
         def _find_suitable(prefix):
-            for key, val in self.solver_confs.iteritems():
+            for key, val in self.solver_confs.items():
                 if val.kind.find(prefix) == 0:
                     return val
             return None
@@ -756,7 +756,7 @@ class Problem(Struct):
                 out = post_process_hook(out, self, state, extend=extend)
 
         if linearization.kind == 'adaptive':
-            for key, val in out.iteritems():
+            for key, val in out.items():
                 mesh = val.get('mesh', self.domain.mesh)
                 aux = io.edit_filename(filename, suffix='_' + val.var_name)
                 mesh.write(aux, io='auto', out={key : val},
@@ -769,9 +769,9 @@ class Problem(Struct):
 
             if self.equations is None:
                 varnames = {}
-                for key, val in out.iteritems():
+                for key, val in out.items():
                     varnames[val.var_name] = 1
-                varnames = varnames.keys()
+                varnames = list(varnames.keys())
                 outvars = self.create_variables(varnames)
                 itervars = outvars.__iter__
             else:
@@ -779,7 +779,7 @@ class Problem(Struct):
 
             for var in itervars():
                 rname = var.field.region.name
-                if meshes.has_key(rname):
+                if rname in meshes:
                     mesh = meshes[rname]
                 else:
                     mesh = Mesh.from_region(var.field.region, self.domain.mesh,
@@ -788,7 +788,7 @@ class Problem(Struct):
                     meshes[rname] = mesh
 
                 vout = {}
-                for key, val in out.iteritems():
+                for key, val in out.items():
                     try:
                         if val.var_name == var.name:
                             vout[key] = val
@@ -847,7 +847,7 @@ class Problem(Struct):
 
         if force:
             vals = dict_from_keys_init(variables.state)
-            for ii, key in enumerate(vals.iterkeys()):
+            for ii, key in enumerate(vals.keys()):
                 vals[key] = ii + 1
 
             state.apply_ebc(force_values=vals)
@@ -1130,7 +1130,7 @@ class Problem(Struct):
 
         if try_equations and self.equations is not None:
             # Make a copy, so that possible variable caches are preserved.
-            for key, var in self.equations.variables.as_dict().iteritems():
+            for key, var in self.equations.variables.as_dict().items():
                 if key in variables:
                     continue
                 var = var.copy(name=key)
@@ -1151,7 +1151,7 @@ class Problem(Struct):
             materials = Materials(objs=materials._objs)
 
         _kwargs = copy(kwargs)
-        for key, val in kwargs.iteritems():
+        for key, val in kwargs.items():
             if isinstance(val, Variable):
                 if val.name != key:
                     msg = 'inconsistent variable name! (%s == %s)' \
@@ -1178,7 +1178,7 @@ class Problem(Struct):
         integrals = get_default(integrals, self.get_integrals())
 
         out = create_evaluable(expression, self.fields, materials,
-                               variables.itervalues(), integrals,
+                               iter(variables.values()), integrals,
                                ebcs=ebcs, epbcs=epbcs, lcbcs=lcbcs,
                                ts=ts, functions=functions,
                                auto_init=auto_init,
@@ -1187,7 +1187,7 @@ class Problem(Struct):
 
         if not strip_variables:
             variables = out[1]
-            variables.extend([var for var in var_context.itervalues()
+            variables.extend([var for var in var_context.values()
                               if var not in variables])
 
         equations = out[0]

@@ -5,7 +5,7 @@ from sfepy.base.conf import ProblemConf, get_standard_keywords
 import sfepy.base.ioutils as io
 from sfepy.discrete import Problem
 from sfepy.discrete.fem.meshio import MeshIO
-from application import Application
+from .application import Application
 
 def solve_pde(conf, options=None, nls_status=None, **app_options):
     """

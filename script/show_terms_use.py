@@ -39,7 +39,7 @@ def main():
 
     required, other = get_standard_keywords()
 
-    terms_use = dict_from_keys_init(term_table.keys(), set)
+    terms_use = dict_from_keys_init(list(term_table.keys()), set)
 
     for filename in locate_files('*.py', pdf_dir):
         base = filename.replace(pdf_dir, '').lstrip(os.path.sep)
@@ -55,7 +55,7 @@ def main():
 
         use = conf.options.get('use_equations', 'equations')
         eqs_conf = getattr(conf, use)
-        for key, eq_conf in eqs_conf.iteritems():
+        for key, eq_conf in eqs_conf.items():
             term_descs = parse_definition(eq_conf)
             for td in term_descs:
                 terms_use[td.name].add(base)
@@ -66,7 +66,7 @@ def main():
     if options.unused:
         output('unused terms:')
 
-        unused = [name for name in terms_use.keys()
+        unused = [name for name in list(terms_use.keys())
                   if len(terms_use[name]) == 0]
         for name in sorted(unused):
             output('  ' + name)

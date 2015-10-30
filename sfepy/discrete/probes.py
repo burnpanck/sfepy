@@ -22,7 +22,7 @@ def write_results(filename, probe, results):
     fd = open(filename, 'w') if isinstance(filename, basestr) else filename
 
     fd.write('\n'.join(probe.report()) + '\n')
-    for key, result in results.iteritems():
+    for key, result in results.items():
         pars, vals = result
         fd.write('\n# %s %d\n' % (key, vals.shape[-1]))
 

@@ -36,7 +36,7 @@ class State(Struct):
         parts = variables.get_state_parts()
         vec = variables.create_state_vector()
 
-        for key, part in parts.iteritems():
+        for key, part in parts.items():
             indx = variables.get_indx(key)
             vec[indx] = part
 
@@ -211,7 +211,7 @@ class State(Struct):
             raise ValueError('cannot set full DOF vector with LCBCs!')
 
         self.variables.set_data(parts)
-        for key, part in parts.iteritems():
+        for key, part in parts.items():
             indx = self.variables.get_indx(key)
             self.vec[indx] = part
 
@@ -280,7 +280,7 @@ class State(Struct):
             parts = self.get_parts()
 
             weights = {}
-            for key, part in parts.iteritems():
+            for key, part in parts.items():
                 pnorm = nm.linalg.norm(part)
                 if pnorm < 10.0 * nm.finfo(nm.float64).eps:
                     pnorm = 1.0
@@ -292,7 +292,7 @@ class State(Struct):
                                  % self.variables.state)
 
         wvec = vec.copy()
-        for key in weights.iterkeys():
+        for key in weights.keys():
             indx = self.variables.get_indx(key)
             wvec[indx] *= weights[key]
 

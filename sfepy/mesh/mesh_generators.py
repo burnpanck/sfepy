@@ -408,8 +408,8 @@ def tiled_mesh1d(conn, coors, ngrps, idim, n_rep, bb, eps=1e-6, ndmap=False):
     s2 = nm.nonzero(coors[:,idim] > (bb[1] - eps))[0]
 
     if s1.shape != s2.shape:
-        raise ValueError, 'incompatible shapes: %s == %s'\
-              % (s1.shape, s2.shape)
+        raise ValueError('incompatible shapes: %s == %s'\
+              % (s1.shape, s2.shape))
 
     (nnod0, dim) = coors.shape
     nnod = nnod0 * n_rep - s1.shape[0] * (n_rep - 1)
@@ -686,7 +686,7 @@ def gen_mesh_from_goem(geo, a=None, quadratic=False, verbose=True,
 
     meshgen_call = {2: 'triangle', 3: 'tetgen'}
     cmd = "%s %s" % (meshgen_call[geo.dim], params)
-    if verbose: print "Generating mesh using", cmd
+    if verbose: print("Generating mesh using", cmd)
     if geo.dim == 2:
         p=pexpect.run(cmd, timeout=None)
         bname, ext = op.splitext(polyfilename)
@@ -704,7 +704,7 @@ def gen_mesh_from_goem(geo, a=None, quadratic=False, verbose=True,
         assert p.before == ""
         p.expect(pexpect.EOF)
         if p.before != "\r\n":
-            print p.before
+            print(p.before)
             raise "Error when running mesh generator (see above for output): %s" % cmd
 
 # http://www.cs.cmu.edu/~quake/triangle.html
@@ -960,9 +960,9 @@ def gen_mesh_from_poly(filename, verbose=True):
                                 l[5],l[6],l[7],l[8],l[9],l[10]))
                     regionnum=l[11]
             if regionnum==0:
-                print "see %s, element # %d"%(fele,l[0])
-                raise "there are elements not belonging to any physical entity"
-            if regions.has_key(regionnum):
+                print("see %s, element # %d"%(fele,l[0]))
+                raise RuntimeError("there are elements not belonging to any physical entity")
+            if regionnum in regions:
                 regions[regionnum].append(l[0])
             else:
                 regions[regionnum]=[l[0]]
@@ -975,8 +975,7 @@ def gen_mesh_from_poly(filename, verbose=True):
         l=[int(x) for x in f.readline().split()]
         nfaces,nattrib=l
         if nattrib!=1:
-            raise "tetgen didn't assign an entity number to each face \
-(option -A)"
+            raise RuntimeError("tetgen didn't assign an entity number to each face (option -A)")
         if verbose: up.init(nfaces)
         faces={}
         for line in f:
@@ -985,7 +984,7 @@ def gen_mesh_from_poly(filename, verbose=True):
             assert len(l)==5
             regionnum=l[4]
             if regionnum==0: continue
-            if faces.has_key(regionnum):
+            if regionnum in faces:
                 faces[regionnum].append((l[1],l[2],l[3]))
             else:
                 faces[regionnum]=[(l[1],l[2],l[3])]
@@ -1005,7 +1004,7 @@ def gen_mesh_from_poly(filename, verbose=True):
             if i+5==8: return avg(1,4,n4,nodes)
             if i+5==9: return avg(2,4,n4,nodes)
             if i+5==10: return avg(3,4,n4,nodes)
-            raise "wrong topology"
+            raise RuntimeError("wrong topology")
         for e in els:
             n4=e[2:2+4]
             n6=e[2+4:2+4+10]
@@ -1013,7 +1012,7 @@ def gen_mesh_from_poly(filename, verbose=True):
                 x,y,z=getxyz(i,n4,nodes)
                 nodes[n-1]=(n,x,y,z)
 
-    if verbose: print "Reading geometry from poly file..."
+    if verbose: print("Reading geometry from poly file...")
     m=Mesh()
     m.nodes=getnodes(filename+".node")
     m.elements,m.regions, lin=getele(filename+".ele")

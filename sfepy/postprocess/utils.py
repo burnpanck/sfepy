@@ -14,7 +14,7 @@ if mayavi:
     from mayavi import mlab
     from mayavi.core.source import Source
     from mayavi.core.filter import Filter
-    import dataset_manager
+    from . import dataset_manager
 
 from sfepy.base.base import basestr
 
@@ -63,14 +63,14 @@ def get_data_ranges(obj, return_only=False, use_names=None, filter_names=None):
         data = getattr(dm, attr)
 
         if use_names is None:
-            names = data.keys()
+            names = list(data.keys())
         else:
             names = use_names
 
         if not return_only and (set(data.keys()).intersection(names)):
-            print family, kind
+            print(family, kind)
 
-        for key, arr in data.iteritems():
+        for key, arr in data.items():
             if (key in filter_names) or (key not in names): continue
 
             shape = arr.shape
@@ -83,6 +83,6 @@ def get_data_ranges(obj, return_only=False, use_names=None, filter_names=None):
 
             if not return_only:
                 aux = (key,) + ranges[key][2:]
-                print '"%s" %s range: %s %s l2 norm range: %s %s' % aux
+                print('"%s" %s range: %s %s l2 norm range: %s %s' % aux)
 
     return ranges

@@ -46,7 +46,7 @@ def wrap_function(function, args):
         out = function(x, *args)
         tt2 = time.time()
         if tt2 < tt:
-            raise RuntimeError, '%f >= %f' % (tt, tt2)
+            raise RuntimeError('%f >= %f' % (tt, tt2))
         times.append(tt2 - tt)
         return out
     return ncalls, times, function_wrapper
@@ -55,7 +55,7 @@ def check_gradient(xit, aofg, fn_of, delta, check):
 
     dofg = nm.zeros_like(aofg)
     xd = xit.copy()
-    for ii in xrange(xit.shape[0]):
+    for ii in range(xit.shape[0]):
         xd[ii] = xit[ii] + delta
         ofp = fn_of(xd)
 
@@ -84,13 +84,11 @@ def check_gradient(xit, aofg, fn_of, delta, check):
         pylab.show()
     pause('gradient checking done')
 
-class FMinSteepestDescent(OptimizationSolver):
+class FMinSteepestDescent(OptimizationSolver, metaclass=SolverMeta):
     """
     Steepest descent optimization solver.
     """
     name = 'opt.fmin_sd'
-
-    __metaclass__ = SolverMeta
 
     _parameters = [
         ('i_max', 'int', 10, False,
@@ -229,7 +227,7 @@ class FMinSteepestDescent(OptimizationSolver):
 
                 if alpha < conf.ls_min:
                     if aux is None:
-                        raise RuntimeError, 'giving up...'
+                        raise RuntimeError('giving up...')
                     output('linesearch failed, continuing anyway')
                     break
 
@@ -269,7 +267,7 @@ class FMinSteepestDescent(OptimizationSolver):
             else:
                 ofg = ofg1.copy()
 
-            for key, val in time_stats.iteritems():
+            for key, val in time_stats.items():
                 if len(val):
                     output('%10s: %7.2f [s]' % (key, val[-1]))
 
@@ -305,13 +303,11 @@ class FMinSteepestDescent(OptimizationSolver):
 
         return xit
 
-class ScipyFMinSolver(OptimizationSolver):
+class ScipyFMinSolver(OptimizationSolver, metaclass=SolverMeta):
     """
     Interface to SciPy optimization solvers scipy.optimize.fmin_*.
     """
     name = 'nls.scipy_fmin_like'
-
-    __metaclass__ = SolverMeta
 
     _i_max_name  = {
         'fmin' : 'maxiter',
@@ -329,7 +325,7 @@ class ScipyFMinSolver(OptimizationSolver):
 
     _parameters = [
         ('method',
-         '{%s}' % ', '.join(sorted(repr(ii) for ii in _i_max_name.keys())),
+         '{%s}' % ', '.join(sorted(repr(ii) for ii in list(_i_max_name.keys()))),
          'fmin', False,
          'The actual optimization method to use.'),
         ('i_max', 'int', 10, False,

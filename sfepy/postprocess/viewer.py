@@ -24,7 +24,7 @@ except ImportError:
     from mayavi.core.ui.mayavi_scene import MayaviScene
 
 
-from dataset_manager import DatasetManager
+from .dataset_manager import DatasetManager
 
 from sfepy.base.base import (insert_as_static_method, output, assert_,
                              get_arguments, get_default, Struct, basestr)
@@ -473,7 +473,7 @@ class Viewer(Struct):
             for ij, iric in enumerate(cycle((n_row, n_col))):
                 ir, ic = iric
                 if ij < len(repeat):
-                    for ik in xrange(repeat[ij]):
+                    for ik in range(repeat[ij]):
                         yield ii, ir, ic
                         ii += 1
 
@@ -1233,10 +1233,10 @@ class ViewerGUI(HasTraits):
         self.scene.camera.print_traits()
         view = mlab.view()
         roll = mlab.roll()
-        print 'view:', view
-        print 'roll:', roll
-        print 'as args: --view=%.2e,%.2e,%.2e,%.2e,%.2e,%.2e --roll=%.2e' \
-              % (view[:3] + tuple(view[3]) + (roll,))
+        print('view:', view)
+        print('roll:', roll)
+        print('as args: --view=%.2e,%.2e,%.2e,%.2e,%.2e,%.2e --roll=%.2e' \
+              % (view[:3] + tuple(view[3]) + (roll,)))
 
     def _button_make_animation_steps_fired(self):
         view = mlab.view()

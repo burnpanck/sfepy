@@ -408,19 +408,19 @@ class EquationMap(Struct):
                 if m_assigned.size or s_assigned.size: # Chain EPBC.
                     aux = master_slave[meq[m_assigned]]
                     sgn = nm.sign(aux)
-                    om_chain = zip(meq[m_assigned], (aux - sgn) * sgn)
+                    om_chain = list(zip(meq[m_assigned], (aux - sgn) * sgn))
                     chains.extend(om_chain)
 
                     aux = master_slave[seq[s_assigned]]
                     sgn = nm.sign(aux)
-                    os_chain = zip(seq[s_assigned], (aux - sgn) * sgn)
+                    os_chain = list(zip(seq[s_assigned], (aux - sgn) * sgn))
                     chains.extend(os_chain)
 
-                    m_chain = zip(meq[m_assigned], seq[m_assigned])
+                    m_chain = list(zip(meq[m_assigned], seq[m_assigned]))
                     chains.extend(m_chain)
 
                     msd = nm.setdiff1d(s_assigned, m_assigned)
-                    s_chain = zip(meq[msd], seq[msd])
+                    s_chain = list(zip(meq[msd], seq[msd]))
                     chains.extend(s_chain)
 
                     msa = nm.union1d(m_assigned, s_assigned)

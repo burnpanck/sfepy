@@ -3,7 +3,7 @@ import os
 import os.path as op
 import fnmatch
 import shutil
-from base import output, Struct, basestr
+from .base import output, Struct, basestr
 try:
     import tables as pt
 except:
@@ -220,7 +220,7 @@ def write_dict_hdf5(filename, adict, level=0, group=None, fd=None):
         fd = pt.openFile(filename, mode='w', title='Recursive dict dump')
         group = '/'
 
-    for key, val in adict.iteritems():
+    for key, val in adict.items():
         if isinstance(val, dict):
             group2 = fd.createGroup(group, '_' + str(key), '%s group' % key)
             write_dict_hdf5(filename, val, level + 1, group2, fd)
@@ -237,11 +237,11 @@ def read_dict_hdf5(filename, level=0, group=None, fd=None):
         fd = pt.openFile(filename, mode='r')
         group = fd.root
 
-    for name, gr in group._v_groups.iteritems():
+    for name, gr in group._v_groups.items():
         name = name.replace('_', '', 1)
         out[name] = read_dict_hdf5(filename, level + 1, gr, fd)
 
-    for name, data in group._v_leaves.iteritems():
+    for name, data in group._v_leaves.items():
         name = name.replace('_', '', 1)
         out[name] = data.read()
 
@@ -267,8 +267,8 @@ def write_sparse_matrix_hdf5(filename, mtx, name='a sparse matrix'):
         fd.createArray(data, 'indices', mtx.indices)
 
     except:
-        print 'matrix must be in SciPy sparse CSR/CSC format!'
-        print mtx.__repr__()
+        print('matrix must be in SciPy sparse CSR/CSC format!')
+        print(mtx.__repr__())
         raise
 
     fd.close()
@@ -306,7 +306,7 @@ def read_sparse_matrix_hdf5(filename, output_format=None):
                            nm.c_[data.rows.read(), data.cols.read()].T),
                           shape=info.shape.read(), dtype=dtype)
     else:
-        print format
+        print(format)
         raise ValueError
     fd.close()
 

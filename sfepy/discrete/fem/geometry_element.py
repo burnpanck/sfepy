@@ -23,8 +23,8 @@ def _get_grid_2_3(n_nod):
     ii = nm.linspace(0.0, 1.0, n1d)
 
     coors = []
-    for iy in xrange(n1d):
-        for ix in xrange(n1d - iy):
+    for iy in range(n1d):
+        for ix in range(n1d - iy):
             coors.append([ii[ix], ii[iy]])
 
     coors = nm.array(coors, dtype=nm.float64)
@@ -57,9 +57,9 @@ def _get_grid_3_4(n_nod):
     ii = nm.linspace(0.0, 1.0, n1d)
 
     coors = []
-    for iz in xrange(n1d):
-        for iy in xrange(n1d - iz):
-            for ix in xrange(n1d - iy - iz):
+    for iz in range(n1d):
+        for iy in range(n1d - iz):
+            for ix in range(n1d - iy - iz):
                 coors.append([ii[ix], ii[iy], ii[iz]])
 
     coors = nm.array(coors, dtype=nm.float64)
@@ -172,7 +172,7 @@ geometry_data = {
 }
 
 def setup_orientation(vecs_tuple):
-    cycle = range(len(vecs_tuple) / 4)
+    cycle = list(range(len(vecs_tuple) / 4))
 
     roots = nm.array([vecs_tuple[4*ii] for ii in cycle], dtype=nm.int32)
     vecs = nm.array([vecs_tuple[4*ii+1] for ii in cycle],
@@ -200,7 +200,7 @@ def create_geometry_elements(names=None):
         The dictionary of geometry elements with names as keys.
     """
     if names is None:
-        names = geometry_data.keys()
+        names = list(geometry_data.keys())
 
     gels = {}
     for name in names:

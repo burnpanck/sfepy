@@ -46,8 +46,8 @@ from sfepy.discrete.fem.geometry_element import geometry_data
 from sfepy.discrete.probes import LineProbe
 from sfepy.discrete.projections import project_by_component
 
-from its2D_2 import stress_strain
-from its2D_3 import nodal_stress
+from .its2D_2 import stress_strain
+from .its2D_3 import nodal_stress
 
 def gen_lines(problem):
     """
@@ -64,7 +64,7 @@ def gen_lines(problem):
 
     labels = ['%s -> %s' % (p0, p1) for p0, p1 in zip(ps0, ps1)]
     probes = []
-    for ip in xrange(len(ps0)):
+    for ip in range(len(ps0)):
         p0, p1 = ps0[ip], ps1[ip]
         probes.append(LineProbe(p0, p1, n_point))
 
@@ -173,7 +173,7 @@ def main():
     domain = FEDomain('domain', mesh)
 
     if options.refine > 0:
-        for ii in xrange(options.refine):
+        for ii in range(options.refine):
             output('refine %d...' % ii)
             domain = domain.refine()
             output('... %d nodes %d elements'

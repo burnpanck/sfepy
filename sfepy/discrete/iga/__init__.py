@@ -1,1 +1,1 @@
-from iga import *
+from .iga import *

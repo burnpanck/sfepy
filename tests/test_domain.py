@@ -101,8 +101,8 @@ def compare_mesh(geo_name, coors, conn):
     _coors = expected_coors[geo_name]
     _conn = expected_conn[geo_name]
 
-    print coors.__repr__()
-    print conn.__repr__()
+    print(coors.__repr__())
+    print(conn.__repr__())
 
     ok = nm.allclose(coors, _coors, rtol=0.0, atol=1e-14)
     ok = ok and (conn == _conn).all()

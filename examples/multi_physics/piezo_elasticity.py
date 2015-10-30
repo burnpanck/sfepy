@@ -127,7 +127,7 @@ def get_inclusion_pars(ts, coor, mode=None, **kwargs):
         }
         out['D'] = stiffness_from_lame(2, out['lam'], out['mu']),
 
-        for key, val in out.iteritems():
+        for key, val in out.items():
             out[key] = nm.tile(val, (coor.shape[0], 1, 1))
         return out
 
